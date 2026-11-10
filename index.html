@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Práctica preparcial · Ecuaciones diferenciales y probabilidad</title>
+<script>
+(function(){ try {
+  if (/[?&]reiniciar(=|&|$)/.test(location.search)) {
+    if (confirm('¿Borrar todo lo que se hizo en esta práctica en este dispositivo (nombre, curso, respuestas, intentos y fotos) y empezar de nuevo?')) {
+      localStorage.removeItem('phpp-edprob-estado-v1');
+      try { indexedDB.deleteDatabase('phpp-edprob-fotos'); } catch (e) {}
+    }
+    location.replace(location.pathname);
+  }
+} catch (e) {} })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Outfit:wght@500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&family=Fira+Code:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2244; --azul:#2B5A93; --azul2:#3a6fae; --ambar:#C77A40; --verde:#45785A; --terra:#BC5235; --violeta:#6E4EAA;
+  --papel:#FBF8F1; --white:#fff; --g100:#f1ede3; --g200:#e4ddcd; --g300:#cfc6b2; --g500:#7a7262; --g600:#5d5648; --g700:#433d33; --g800:#2a2620;
+  --ok:#45785A; --ok-bg:#e3efe6; --warn:#C77A40; --warn-bg:#fbefe3; --bad:#BC5235; --bad-bg:#f8e4de;
+  --lab-terra:#b57d4c; --lab-blue:#415a8e; --lab-dark:#20201c; --lab-cream:#faf8f1; --lab-gray:#6579a1;
+  --r:12px; --rl:16px;
+  --sh:0 3px 10px -4px rgba(60,45,20,.18);
+  --f-body:'Hanken Grotesk',sans-serif; --f-disp:'Fraunces',Georgia,serif; --f-mono:'Fira Code',monospace;
+}
+:root{color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f-body);font-size:15px;line-height:1.65;color:var(--g800);min-height:100vh;
+  background-color:var(--papel);
+  background-image:linear-gradient(rgba(43,90,147,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(43,90,147,.06) 1px,transparent 1px);
+  background-size:28px 28px}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--azul)}
+
+/* ===== chrome ===== */
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6e 100%);color:#e0f2fe;padding:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.topbar-inner{max-width:1080px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-inspt{font-size:12px;color:#7dd3fc;letter-spacing:.1em;font-weight:700}
+.brand-title{font-family:'Fraunces',serif;font-size:18px;color:#fff;font-weight:700}
+.brand-sub{font-size:12px;color:#bfdbfe}
+.lab-logo{background:var(--lab-cream);padding:8px 18px 7px;border-radius:12px;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.lab-name{display:flex;align-items:center;font-family:'Fraunces',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:-0.01em;line-height:1.2}
+.lab-name .bullet{width:8px;height:8px;border-radius:50%;background:var(--lab-terra);flex-shrink:0;margin-right:7px}
+.lab-name .lab{color:var(--lab-dark)} .lab-name .best{color:var(--lab-terra)} .lab-name .ia{color:var(--lab-blue)}
+.lab-sub{color:var(--lab-gray);font-size:11px;font-weight:500;margin-top:1px;padding-left:15px;font-family:'Outfit',sans-serif}
+.ej-lab{font-family:'Fraunces',Georgia,serif;font-size:12.5px;font-weight:700;display:flex;align-items:center;margin-left:auto}
+.ej-lab .bullet{width:6px;height:6px;border-radius:50%;background:var(--lab-terra);margin-right:5px}
+.ej-lab .lab{color:var(--lab-dark);opacity:.75} .ej-lab .best{color:var(--lab-terra)} .ej-lab .ia{color:var(--lab-blue)}
+.site-footer{background:var(--navy);color:#cbd5e1;padding:30px 0 24px;margin-top:40px}
+.footer-inner{max-width:1080px;margin:0 auto;padding:0 20px;text-align:center}
+.footer-quote{font-family:'Fraunces',serif;font-style:italic;font-size:1.1rem;color:#e0f2fe;margin-bottom:16px}
+.footer-lab{display:inline-block;background:var(--lab-cream);padding:10px 22px 9px;border-radius:12px;text-align:left;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.footer-lab .lab-name{font-size:17px}
+.footer-lab .lab-sub{font-size:12px;padding-left:15px}
+@media (max-width:640px){.topbar-inner{justify-content:center;text-align:center}}
+
+/* ===== layout ===== */
+.wrap{max-width:780px;margin:0 auto;padding:0 16px}
+.badge{display:inline-block;font-family:var(--f-mono);font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--azul);background:#e2eaf4;border-radius:999px;padding:3px 10px}
+h2{font-family:var(--f-disp);font-weight:400;font-size:2.1rem;line-height:1.15;color:var(--navy);margin:.3em 0 .25em}
+@media (min-width:640px){h2{font-size:2.7rem}}
+h3{font-family:var(--f-disp);font-weight:400;font-size:1.25rem;color:var(--navy)}
+
+.ident{background:var(--white);border:1px solid var(--g200);border-radius:var(--rl);box-shadow:var(--sh);padding:20px;margin:24px 0 18px}
+.ident p{font-size:14.5px;color:var(--g700);margin-bottom:10px}
+.ident-id{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#e8eef6;border-radius:var(--r);padding:10px 14px;margin:12px 0}
+.ident-id.falta{outline:3px solid var(--warn);outline-offset:2px;background:var(--warn-bg)}
+.ident-id label{font-weight:600;color:var(--navy)}
+.ident-id input{font-family:var(--f-body);font-size:15px;border:1px solid var(--g300);border-radius:8px;padding:6px 10px;background:#fff;color:var(--g800);min-width:0;flex:1 1 180px}
+.ident-aviso{width:100%;font-weight:600;color:#7a4317;font-size:14px}
+select{font-family:var(--f-body);font-size:15px;border:1px solid var(--g300);border-radius:8px;padding:6px 10px;background:#fff;color:var(--g800)}
+.reloj{font-size:14px;color:var(--g700)}
+.reloj b{font-family:var(--f-mono);font-weight:500;color:var(--navy)}
+.reset-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;font-size:13.5px}
+
+.tabs{position:sticky;top:0;z-index:20;background:rgba(251,248,241,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--g200)}
+.tabs-inner{max-width:780px;margin:0 auto;padding:8px 16px;display:flex;gap:6px}
+.tab{flex:1 1 0;min-width:0;border:1px solid var(--g200);background:var(--white);border-radius:var(--r);padding:6px 8px;text-align:left;display:flex;flex-direction:column;line-height:1.25;color:var(--g700)}
+.tab-n{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab-name{font-weight:600;font-size:13px;overflow-wrap:anywhere}
+.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.tab.active .tab-n{color:#9cc3f0}
+@media (max-width:520px){.tab-n{display:none}.tab{padding:7px 6px;text-align:center}.tab-name{font-size:12px}}
+
+.tanda{display:none;padding-top:22px}
+.tanda.active{display:block}
+.tanda-head{margin-bottom:16px}
+.tanda-intro{color:var(--g700)}
+
+.ej{background:var(--white);border:1px solid var(--g200);border-radius:var(--rl);box-shadow:var(--sh);padding:18px 20px;margin-bottom:18px;scroll-margin-top:70px}
+@media (max-width:520px){.ej{padding:16px 14px}}
+.ej-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ej-tit{font-family:var(--f-disp);font-weight:700;font-size:1.3rem;color:var(--navy)}
+.ej-pts{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.05em;color:var(--azul);background:#e2eaf4;border-radius:999px;padding:2px 9px}
+.enun p{margin-bottom:8px}
+.hints-box{margin:10px 0 4px}
+.hints{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.hint{background:var(--warn-bg);border-left:3px solid var(--ambar);border-radius:8px;padding:8px 12px;font-size:14px;color:#5c3412}
+.hint-n{font-family:var(--f-mono);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ambar);margin-right:6px}
+.btn-ghost{background:transparent;border:1px dashed var(--ambar);color:#7a4317;font-size:13px;font-weight:600;border-radius:999px;padding:5px 14px}
+.btn-ghost:disabled{opacity:.45;cursor:default}
+.btn-ghost.plain{border-color:var(--g300);color:var(--g600)}
+.check{margin-top:12px;border-top:1px solid var(--g200);padding-top:12px}
+.gate{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--g700);font-weight:600;cursor:pointer}
+.gate input{width:17px;height:17px;accent-color:var(--azul)}
+.check-body{margin-top:8px;transition:opacity .2s}
+.check-body.locked{opacity:.4;pointer-events:none;user-select:none}
+.item{border-top:1px dashed var(--g200);padding:12px 0 6px;scroll-margin-top:80px}
+.item:first-child{border-top:0}
+.item.done .cq::after{content:" ✓";color:var(--ok);font-weight:700}
+.cq{font-weight:600;color:var(--navy);margin-bottom:8px;font-size:14.5px}
+.it-pts{font-family:var(--f-mono);font-weight:400;font-size:.68rem;color:var(--g500);margin-left:4px;white-space:nowrap}
+.nnote{font-size:13px;color:var(--g600);margin:-4px 0 8px}
+.choices{display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;align-items:center;gap:10px;border:1px solid var(--g200);border-radius:var(--r);padding:8px 12px;background:#fdfcf8;cursor:pointer}
+.choice:hover{border-color:var(--azul2)}
+.choice input{accent-color:var(--azul);flex-shrink:0}
+.choice>span{min-width:0}
+.nums{display:flex;flex-wrap:wrap;gap:12px 18px}
+.numf{display:flex;align-items:center;gap:8px;font-size:14.5px;flex-wrap:wrap}
+.numf input{font-family:var(--f-body);font-size:15px;border:1px solid var(--g300);border-radius:8px;padding:6px 10px;background:#fff;color:var(--g800);width:120px}
+.check-actions{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;background:var(--azul);color:#fff;font-weight:600;font-size:14px;padding:8px 20px}
+.btn:hover{background:var(--azul2)}
+.btn:disabled{background:var(--g300);cursor:default}
+.tries{font-size:12.5px;color:var(--g500)}
+.fb{margin-top:10px;font-size:14px;border-radius:10px}
+.fb:empty{display:none}
+.fb.ok{background:var(--ok-bg);color:#24452f;padding:10px 12px;border-left:3px solid var(--ok)}
+.fb.no{background:var(--bad-bg);color:#6b2414;padding:10px 12px;border-left:3px solid var(--bad)}
+.fb.stop{background:var(--warn-bg);color:#5c3412;padding:10px 12px;border-left:3px solid var(--ambar)}
+.fb .mi{background:rgba(255,255,255,.6)}
+
+/* informe */
+.pts-wrap{overflow-x:auto;overflow-y:hidden}
+.pts{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.pts th{text-align:left;font-weight:600;color:var(--navy);border-bottom:2px solid var(--g200);padding:6px 8px;white-space:nowrap}
+.pts td{border-bottom:1px solid var(--g100);padding:6px 8px;vertical-align:top}
+.pts td:last-child,.pts th:last-child{text-align:right;white-space:nowrap}
+.pts tr.exh td{background:#f5f1e6;font-weight:600;color:var(--navy)}
+.pts tr.sub td{background:#e8eef6;font-weight:600;color:var(--navy)}
+.pts tr.tot td{background:var(--navy);color:#fff;font-weight:700;font-size:14.5px}
+.pts .ns{color:var(--g500)}
+@media (max-width:520px){.pts td,.pts th{padding:6px 5px}}
+.fotos{display:flex;flex-direction:column;gap:14px}
+.ftanda{border:1px solid var(--g200);border-radius:var(--r);padding:12px;background:#fdfcf8}
+.ftanda-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ftanda-h b{color:var(--navy)}
+.fbtns{display:flex;gap:6px;flex-wrap:wrap}
+.fbtn{display:inline-flex;align-items:center;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;background:var(--azul);color:#fff}
+.fbtn.ghost{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+.fbtn input{display:none}
+.fconsejo{font-size:13px;color:var(--g600);margin-bottom:10px}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px}
+.thumb{position:relative;width:96px;height:96px;border-radius:8px;overflow:hidden;border:1px solid var(--g300);background:#fff}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{position:absolute;top:3px;right:3px;border:0;border-radius:999px;background:rgba(15,34,68,.85);color:#fff;font-size:11px;padding:2px 7px}
+.fvacia{font-size:12.5px;color:var(--g500)}
+.inf-check{font-size:14px;color:var(--g700);display:flex;flex-direction:column;gap:4px}
+.inf-check .bad{color:var(--bad)} .inf-check .good{color:var(--ok)}
+
+/* resoluciones (apéndice del PDF) */
+#res-render{position:absolute;left:-12000px;top:0;width:720px;background:#fff;color:#2a2620;font-family:var(--f-body);font-size:15px;line-height:1.55;padding:18px 22px}
+#res-render .rb-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #0f2244;padding-bottom:6px;margin-bottom:8px}
+#res-render .rb-h b{font-family:var(--f-disp);font-size:20px;color:#0f2244}
+#res-render .rb-h span{font-size:13px;color:#5d5648}
+#res-render .rb-enun{background:#f3f6fa;border-radius:8px;padding:6px 10px;margin-bottom:8px;font-size:14px}
+#res-render .rb-enun p{margin:3px 0}
+.rs-paso{margin:8px 0 10px}
+.rs-paso h5{font-size:14.5px;color:var(--azul);font-weight:700;margin-bottom:2px}
+.rs-paso p{margin:3px 0;line-height:1.9}
+.rs-line{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap}
+.rs-calc{text-align:left !important;padding:3px 0 !important;margin:2px 0 !important;font-size:1.08em}
+.rg{font-family:var(--f-body);font-size:12px;color:var(--violeta);background:#efeaf7;border-radius:6px;padding:1px 8px;white-space:nowrap}
+.rg .fr{font-size:.95em}
+#res-render .mi{background:none;padding:0 .1em}
+
+#print-view{display:none}
+@media print{
+  body>*:not(#print-view){display:none !important}
+  #print-view{display:block !important;font-family:var(--f-body);color:#000}
+  #print-view .pv-foto,#print-view .pv-res{page-break-before:always}
+  #print-view img{max-width:100%;max-height:240mm}
+}
+
+/* ===== matemática ===== */
+.mi,.calc{font-family:'STIX Two Text','STIXGeneral','Times New Roman',serif;font-style:normal}
+.mi i,.calc i{font-style:italic}
+.mi{font-size:1.1em;background:#e9eff7;border-radius:4px;padding:0 .2em;line-height:1.5}
+.hint .mi{background:rgba(255,255,255,.6)}
+.choice .mi,.numf .mi,.rg .mi{background:transparent;padding:0}
+.calc{font-size:1.18em;text-align:center;padding:10px 6px;margin:6px 0;overflow-x:auto;overflow-y:hidden;line-height:1.9}
+.fr{display:inline-flex;flex-direction:column;text-align:center;margin:0 .14em;vertical-align:middle;line-height:1.15}
+.fr .fn{padding:0 .4em .12em}
+.fr .fd{padding:.14em .4em 0;border-top:1.2px solid currentColor}
+sub,sup{font-size:.72em;line-height:0;vertical-align:baseline;position:relative}
+sub{top:.34em} sup{top:-.48em}
+sup .fr{font-size:.85em;vertical-align:.1em}
+sup .fr .fn,sup .fr .fd{padding:0 .25em}
+.at{display:inline-block;white-space:nowrap}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle;margin:0 .08em}
+.sq>svg{width:.6em;min-width:8px;align-self:stretch;height:auto;overflow:visible;flex-shrink:0}
+.sq-b{display:inline-flex;align-items:center;border-top:1.2px solid currentColor;padding:.1em .28em .06em .1em}
+.os{margin:0 .26em} .ob{margin:0 .15em} .ou{margin-right:.02em}
+.gap{display:inline-block;width:1.6em}
+.mi .os{margin:0 .2em} .mi .ob{margin:0 .12em}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><div>
+      <div class="brand-inspt">Escuela Philips</div>
+      <div class="brand-title">Práctica preparcial · Ecuaciones diferenciales y probabilidad</div>
+      <div class="brand-sub">Matemática · 5.º año</div>
+    </div></div>
+    <div class="lab-logo">
+      <div class="lab-name"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div>
+      <div class="lab-sub">Prof. Ariel L. Cardozo Delgado</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="ident">
+      <span class="badge">Opción 1</span>
+      <h3 style="margin-top:8px">Antes de arrancar</h3>
+      <p>Resolvé en hoja aparte, en birome y en el orden que quieras. Escribí todos los pasos: en las ecuaciones, la separación, las integrales y cómo hallás cada constante; en probabilidad, qué sucesos usás y qué regla aplicás. Podés usar calculadora científica.</p>
+      <p>Cuando tengas el resultado en la hoja, escribilo acá y verificá. Cada ítem suma completo si acertás en el primer intento, el 60 % en el segundo y el 30 % en el tercero. Las pistas no descuentan. Los ejercicios 1 a 5 valen 2 puntos cada uno, como en el parcial; el 6 y el 7 son práctica adicional.</p>
+      <div class="ident-id" id="ident-id">
+        <label for="alumno">Apellido y nombre</label>
+        <input id="alumno" type="text" autocomplete="name" placeholder="Ej.: Pérez, Ana">
+        <label for="curso-sel">Curso</label>
+        <select id="curso-sel"><option value="">Elegir…</option><option>5.º ET</option><option>5.º FT</option></select>
+        <p class="ident-aviso" id="ident-aviso" hidden></p>
+      </div>
+      <div class="reloj" id="reloj">El tiempo empieza a contar cuando verificás o pedís la primera pista. En el parcial vas a tener dos módulos.</div>
+      <div class="reset-row" id="reset-row"><button type="button" class="btn-ghost plain" id="btn-reiniciar">Borrar todo y empezar de nuevo</button></div>
+    </section>
+  </div>
+
+  <nav class="tabs" id="tabs"><div class="tabs-inner"><button type="button" class="tab active" data-tab="ed"><span class="tab-n">Ejercicios 1 y 2</span><span class="tab-name">Ecuaciones diferenciales</span></button><button type="button" class="tab" data-tab="pr"><span class="tab-n">Ejercicios 3, 4 y 5</span><span class="tab-name">Probabilidad</span></button><button type="button" class="tab" data-tab="co"><span class="tab-n">Ejercicios 6 y 7 · adicionales</span><span class="tab-name">Condicional</span></button><button type="button" class="tab" data-tab="inf"><span class="tab-n">Entrega</span><span class="tab-name">Informe</span></button></div></nav>
+
+  <div class="wrap">
+<section class="tanda active" id="ed">
+  <div class="tanda-head"><span class="badge">Ejercicios 1 y 2</span><h2>Ecuaciones diferenciales</h2><p class="tanda-intro">Una ecuación de variables separables y un problema de enfriamiento con la ley de Newton, como en el parcial.</p></div>
+<article class="ej" id="ex-e1">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 1</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>Resolvé la ecuación diferencial con la condición inicial dada y escribí la solución en forma explícita.</p><div class="calc"><i>y</i>′<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>x</i> <i>y</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span><span class="gap"></span><i>y</i>(0)<wbr><span class="os">=</span>5</div></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e1-0" hidden><span class="hint-n">Pista 1</span> Separá las variables: todo lo que tiene <span class="mi"><i>y</i></span> va con <span class="mi">d<i>y</i></span> y todo lo que tiene <span class="mi"><i>x</i></span> va con <span class="mi">d<i>x</i></span>. Queda <span class="mi"><span class="fr"><span class="fn">d<i>y</i></span><span class="fd"><i>y</i></span></span><wbr><span class="os">=</span><span class="fr"><span class="fn"><i>x</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span> d<i>x</i></span>.</li><li class="hint" data-hint="e1-1" hidden><span class="hint-n">Pista 2</span> La integral de <span class="mi"><span class="fr"><span class="fn"><i>x</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span></span> sale con la sustitución <span class="mi"><i>u</i><wbr><span class="os">=</span><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span>: da <span class="mi"><span class="fr"><span class="fn">1</span><span class="fd">2</span></span> ln(<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span>.</li><li class="hint" data-hint="e1-2" hidden><span class="hint-n">Pista 3</span> Al aplicar la exponencial, <span class="mi"><span class="at">e<sup><i>C</i></sup></span></span> pasa a multiplicar: llamalo <span class="mi"><i>A</i></span>. Después reemplazá <span class="mi"><i>x</i><wbr><span class="os">=</span>0</span> e <span class="mi"><i>y</i><wbr><span class="os">=</span>5</span>.</li></ol>
+    <button type="button" class="btn-ghost" data-more="e1" data-n="3">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e1"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e1">
+<div class="item" id="ej-e1" data-ex="e1" data-tit="E1">
+<p class="cq">¿Cuál es la solución particular en forma explícita? <span class="it-pts">2 puntos</span></p>
+<div class="choices">
+<label class="choice"><input type="radio" name="e1" value="b"><span><span class="mi"><i>y</i><wbr><span class="os">=</span><span class="sq"><svg viewBox="0 0 10 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6 14.5 L2.8 14.5 L5.2 22.4 L9.4 1.2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg><span class="sq-b"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span><wbr><span class="ob">+</span>4</span></span></label>
+<label class="choice"><input type="radio" name="e1" value="d"><span><span class="mi"><i>y</i><wbr><span class="os">=</span>5<wbr><span class="ob">+</span><span class="fr"><span class="fn">1</span><span class="fd">2</span></span> ln(<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span></span></label>
+<label class="choice"><input type="radio" name="e1" value="a"><span><span class="mi"><i>y</i><wbr><span class="os">=</span><span class="at">5<span class="sq"><svg viewBox="0 0 10 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6 14.5 L2.8 14.5 L5.2 22.4 L9.4 1.2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg><span class="sq-b"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span></span></span></span></label>
+<label class="choice"><input type="radio" name="e1" value="e"><span><span class="mi"><i>y</i><wbr><span class="os">=</span>5 <span class="at">e<sup><span class="fr"><span class="fn"><span class="at"><i>x</i><sup>2</sup></span></span><span class="fd">2</span></span></sup></span></span></span></label>
+<label class="choice"><input type="radio" name="e1" value="c"><span><span class="mi"><i>y</i><wbr><span class="os">=</span>5 (<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span></span></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e1">Verificar</button><span class="tries" data-tries="e1"></span></div>
+<div class="fb" data-fb="e1" aria-live="polite"></div></div>
+  </div></div>
+</article>
+<article class="ej" id="ex-e2">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 2</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>Una taza de té recién servida está a 100 °C y se deja enfriar en una habitación, donde la temperatura se mantiene constante en 20 °C. A los 4 minutos está a 60 °C. La ley de enfriamiento de Newton dice que la velocidad con que cambia la temperatura de un cuerpo es proporcional a la diferencia entre su temperatura y la del ambiente.</p><p><b>a)</b> Hallá la solución general de la ecuación diferencial y determiná el valor de la constante de integración <span class="mi"><i>A</i></span>. Escribí la temperatura <span class="mi"><i>T</i>(<i>t</i>)</span>.<br><b>b)</b> Calculá la constante de proporcionalidad <span class="mi"><i>K</i></span>.<br><b>c)</b> ¿Qué temperatura tiene a los 8 minutos?<br><b>d)</b> ¿En qué instante llega a 25 °C?</p></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e2-0" hidden><span class="hint-n">Pista 1</span> La ley en símbolos es <span class="mi"><span class="fr"><span class="fn">d<i>T</i></span><span class="fd">d<i>t</i></span></span><wbr><span class="os">=</span><span class="at"><i>K</i>(<i>T</i><wbr><span class="ob">−</span><i>T</i><sub>a</sub>)</span></span>, y acá <span class="mi"><i>T</i><sub>a</sub><wbr><span class="os">=</span>20</span>. Separá: <span class="mi"><span class="fr"><span class="fn">d<i>T</i></span><span class="fd"><i>T</i><wbr><span class="ob">−</span>20</span></span><wbr><span class="os">=</span><i>K</i> d<i>t</i></span>.</li><li class="hint" data-hint="e2-1" hidden><span class="hint-n">Pista 2</span> Integrando y aplicando la exponencial queda <span class="mi"><i>T</i><wbr><span class="os">=</span>20<wbr><span class="ob">+</span><i>A</i> <span class="at">e<sup><i>K</i><i>t</i></sup></span></span>. La temperatura inicial te da <span class="mi"><i>A</i></span>: reemplazá <span class="mi"><i>t</i><wbr><span class="os">=</span>0</span>.</li><li class="hint" data-hint="e2-2" hidden><span class="hint-n">Pista 3</span> Para <span class="mi"><i>K</i></span>: con <span class="mi"><i>T</i>(4)<wbr><span class="os">=</span>60</span> queda <span class="mi"><span class="at">e<sup>4<i>K</i></sup></span><wbr><span class="os">=</span><span class="fr"><span class="fn">1</span><span class="fd">2</span></span></span>. Tomá logaritmo natural en los dos miembros.</li><li class="hint" data-hint="e2-3" hidden><span class="hint-n">Pista 4</span> Para d): igualá <span class="mi"><i>T</i>(<i>t</i>)<wbr><span class="os">=</span>25</span>, despejá <span class="mi"><span class="at">e<sup><i>K</i><i>t</i></sup></span></span> y tomá logaritmo.</li></ol>
+    <button type="button" class="btn-ghost" data-more="e2" data-n="4">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e2"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e2">
+<div class="item" id="ej-e2a" data-ex="e2" data-tit="E2 a)">
+<p class="cq">a) Valor de la constante de integración. <span class="it-pts">0,5 puntos</span></p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>A</i></span></span> = <input type="text" inputmode="decimal" data-num="e2a-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e2a">Verificar</button><span class="tries" data-tries="e2a"></span></div>
+<div class="fb" data-fb="e2a" aria-live="polite"></div></div>
+<div class="item" id="ej-e2b" data-ex="e2" data-tit="E2 b)">
+<p class="cq">b) Valor de <span class="mi"><i>K</i></span>, con cuatro decimales. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Usá la calculadora y escribí el número con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>K</i></span></span> = <input type="text" inputmode="decimal" data-num="e2b-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e2b">Verificar</button><span class="tries" data-tries="e2b"></span></div>
+<div class="fb" data-fb="e2b" aria-live="polite"></div></div>
+<div class="item" id="ej-e2c" data-ex="e2" data-tit="E2 c)">
+<p class="cq">c) Temperatura a los 8 minutos, en °C. <span class="it-pts">0,5 puntos</span></p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>T</i>(8)</span></span> = <input type="text" inputmode="decimal" data-num="e2c-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e2c">Verificar</button><span class="tries" data-tries="e2c"></span></div>
+<div class="fb" data-fb="e2c" aria-live="polite"></div></div>
+<div class="item" id="ej-e2d" data-ex="e2" data-tit="E2 d)">
+<p class="cq">d) Instante en que llega a 25 °C, en minutos. <span class="it-pts">0,5 puntos</span></p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>t</i></span></span> = <input type="text" inputmode="decimal" data-num="e2d-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e2d">Verificar</button><span class="tries" data-tries="e2d"></span></div>
+<div class="fb" data-fb="e2d" aria-live="polite"></div></div>
+  </div></div>
+</article>
+</section>
+<section class="tanda" id="pr">
+  <div class="tanda-head"><span class="badge">Ejercicios 3, 4 y 5</span><h2>Probabilidad</h2><p class="tanda-intro">Extracciones sin reposición, álgebra de sucesos y un árbol con tres ramas, como en el parcial.</p></div>
+<article class="ej" id="ex-e3">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 3</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>Una bolsa tiene 5 bolitas rojas y 5 verdes. Se extraen tres bolitas, una después de la otra, sin reposición. Calculá la probabilidad de que:</p><p><b>a)</b> las tres sean rojas; <b>b)</b> al menos una sea verde; <b>c)</b> exactamente dos sean rojas; <b>d)</b> la tercera sea roja, sabiendo que las dos primeras fueron verdes.</p></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e3-0" hidden><span class="hint-n">Pista 1</span> Pensalo con un diagrama de árbol: en cada extracción hay una bolita menos, y la probabilidad de una rama es el producto de las probabilidades a lo largo de ella (regla del producto).</li><li class="hint" data-hint="e3-1" hidden><span class="hint-n">Pista 2</span> «Al menos una verde» es el complemento de «ninguna verde», que es «las tres rojas».</li><li class="hint" data-hint="e3-2" hidden><span class="hint-n">Pista 3</span> «Exactamente dos rojas» puede darse en tres órdenes: <span class="mi"><i>R</i><i>R</i><i>V</i></span>, <span class="mi"><i>R</i><i>V</i><i>R</i></span> y <span class="mi"><i>V</i><i>R</i><i>R</i></span>. Calculá una rama y fijate que las tres valen lo mismo.</li><li class="hint" data-hint="e3-3" hidden><span class="hint-n">Pista 4</span> En d), después de sacar dos verdes, ¿cuántas bolitas quedan y cuántas de ellas son rojas?</li></ol>
+    <button type="button" class="btn-ghost" data-more="e3" data-n="4">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e3"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e3">
+<div class="item" id="ej-e3a" data-ex="e3" data-tit="E3 a)">
+<p class="cq">a) Las tres son rojas. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>R</i><i>R</i><i>R</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e3a-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e3a">Verificar</button><span class="tries" data-tries="e3a"></span></div>
+<div class="fb" data-fb="e3a" aria-live="polite"></div></div>
+<div class="item" id="ej-e3b" data-ex="e3" data-tit="E3 b)">
+<p class="cq">b) Al menos una es verde. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e3b-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e3b">Verificar</button><span class="tries" data-tries="e3b"></span></div>
+<div class="fb" data-fb="e3b" aria-live="polite"></div></div>
+<div class="item" id="ej-e3c" data-ex="e3" data-tit="E3 c)">
+<p class="cq">c) Exactamente dos son rojas. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e3c-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e3c">Verificar</button><span class="tries" data-tries="e3c"></span></div>
+<div class="fb" data-fb="e3c" aria-live="polite"></div></div>
+<div class="item" id="ej-e3d" data-ex="e3" data-tit="E3 d)">
+<p class="cq">d) La tercera es roja, sabiendo que las dos primeras fueron verdes. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e3d-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e3d">Verificar</button><span class="tries" data-tries="e3d"></span></div>
+<div class="fb" data-fb="e3d" aria-live="polite"></div></div>
+  </div></div>
+</article>
+<article class="ej" id="ex-e4">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 4</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>Sean <span class="mi"><i>A</i></span> y <span class="mi"><i>B</i></span> dos sucesos de un mismo experimento tales que</p><div class="calc"><i>P</i>(<i>A</i>)<wbr><span class="os">=</span>0,5<span class="gap"></span><i>P</i>(<i>B</i>)<wbr><span class="os">=</span>0,4<span class="gap"></span><i>P</i>(<span class="at">(<i>A</i><span class="ob">∪</span><i>B</i>)<sup>c</sup></span>)<wbr><span class="os">=</span>0,3</div><p><b>a)</b> Calculá <span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span> y <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span>.<br><b>b)</b> Calculá la probabilidad de que ocurra <span class="mi"><i>A</i></span> y no ocurra <span class="mi"><i>B</i></span>.<br><b>c)</b> ¿<span class="mi"><i>A</i></span> y <span class="mi"><i>B</i></span> son independientes? ¿Son mutuamente excluyentes? Justificá.</p></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e4-0" hidden><span class="hint-n">Pista 1</span> El dato <span class="mi"><i>P</i>(<span class="at">(<i>A</i><span class="ob">∪</span><i>B</i>)<sup>c</sup></span>)</span> es el complemento de la unión: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)<wbr><span class="os">=</span>1<wbr><span class="ob">−</span>0,3</span>.</li><li class="hint" data-hint="e4-1" hidden><span class="hint-n">Pista 2</span> Para la intersección usá la regla de la suma despejada: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span><i>P</i>(<i>A</i>)<wbr><span class="ob">+</span><i>P</i>(<i>B</i>)<wbr><span class="ob">−</span><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span>.</li><li class="hint" data-hint="e4-2" hidden><span class="hint-n">Pista 3</span> «Ocurre <span class="mi"><i>A</i></span> y no ocurre <span class="mi"><i>B</i></span>» es la parte de <span class="mi"><i>A</i></span> que queda afuera de <span class="mi"><i>B</i></span>: <span class="mi"><i>P</i>(<i>A</i>)<wbr><span class="ob">−</span><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span>.</li><li class="hint" data-hint="e4-3" hidden><span class="hint-n">Pista 4</span> Independientes: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span><i>P</i>(<i>A</i>)<span class="ob">·</span><i>P</i>(<i>B</i>)</span>. Excluyentes: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span>0</span>.</li></ol>
+    <button type="button" class="btn-ghost" data-more="e4" data-n="4">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e4"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e4">
+<div class="item" id="ej-e4a" data-ex="e4" data-tit="E4 a)">
+<p class="cq">a) Unión e intersección. <span class="it-pts">0,8 puntos</span></p>
+<p class="nnote">Escribí los decimales con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e4a-0" autocomplete="off"></label>
+<label class="numf"><span><span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e4a-1" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e4a">Verificar</button><span class="tries" data-tries="e4a"></span></div>
+<div class="fb" data-fb="e4a" aria-live="polite"></div></div>
+<div class="item" id="ej-e4b" data-ex="e4" data-tit="E4 b)">
+<p class="cq">b) Ocurre <span class="mi"><i>A</i></span> y no ocurre <span class="mi"><i>B</i></span>. <span class="it-pts">0,6 puntos</span></p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e4b-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e4b">Verificar</button><span class="tries" data-tries="e4b"></span></div>
+<div class="fb" data-fb="e4b" aria-live="polite"></div></div>
+<div class="item" id="ej-e4c" data-ex="e4" data-tit="E4 c)">
+<p class="cq">c) ¿Qué se puede afirmar de <span class="mi"><i>A</i></span> y <span class="mi"><i>B</i></span>? <span class="it-pts">0,6 puntos</span></p>
+<div class="choices">
+<label class="choice"><input type="radio" name="e4c" value="c"><span>No son independientes ni excluyentes.</span></label>
+<label class="choice"><input type="radio" name="e4c" value="a"><span>Son independientes y no son excluyentes.</span></label>
+<label class="choice"><input type="radio" name="e4c" value="e"><span>Son excluyentes, porque <span class="mi"><i>P</i>(<i>A</i>)<wbr><span class="ob">+</span><i>P</i>(<i>B</i>)<wbr><span class="os">=</span>0,9</span> no llega a 1.</span></label>
+<label class="choice"><input type="radio" name="e4c" value="b"><span>Son independientes y excluyentes.</span></label>
+<label class="choice"><input type="radio" name="e4c" value="d"><span>No son independientes y son excluyentes.</span></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e4c">Verificar</button><span class="tries" data-tries="e4c"></span></div>
+<div class="fb" data-fb="e4c" aria-live="polite"></div></div>
+  </div></div>
+</article>
+<article class="ej" id="ex-e5">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 5</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>Un supermercado recibe frascos de tres envasadoras: el 50 % de la envasadora 1, el 30 % de la 2 y el resto de la 3. Son defectuosos el 2 % de los frascos de la envasadora 1, el 3 % de los de la 2 y el 6 % de los de la 3. Se elige al azar un frasco.</p><p><b>a)</b> Calculá la probabilidad de que sea defectuoso.<br><b>b)</b> Calculá la probabilidad de que no sea defectuoso.<br><b>c)</b> Calculá la probabilidad de que provenga de la envasadora 2 y sea defectuoso.<br><b>d)</b> Se eligen al azar dos frascos; son tantos que lo que pase con uno no cambia las probabilidades del otro. Calculá la probabilidad de que al menos uno sea defectuoso.</p></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e5-0" hidden><span class="hint-n">Pista 1</span> Armá el árbol: primero la envasadora (0,5 · 0,3 · 0,2), después defectuoso o no. La envasadora 3 manda el 20 % que falta.</li><li class="hint" data-hint="e5-1" hidden><span class="hint-n">Pista 2</span> Para a), sumá las tres ramas que terminan en defectuoso; cada rama es un producto (probabilidad total).</li><li class="hint" data-hint="e5-2" hidden><span class="hint-n">Pista 3</span> c) es una sola rama del árbol: envasadora 2 y defectuoso.</li><li class="hint" data-hint="e5-3" hidden><span class="hint-n">Pista 4</span> d): lo contrario de «al menos uno defectuoso» es «ninguno defectuoso». Los dos frascos son independientes, así que se multiplica.</li></ol>
+    <button type="button" class="btn-ghost" data-more="e5" data-n="4">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e5"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e5">
+<div class="item" id="ej-e5a" data-ex="e5" data-tit="E5 a)">
+<p class="cq">a) Es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Escribí el decimal con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>D</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e5a-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e5a">Verificar</button><span class="tries" data-tries="e5a"></span></div>
+<div class="fb" data-fb="e5a" aria-live="polite"></div></div>
+<div class="item" id="ej-e5b" data-ex="e5" data-tit="E5 b)">
+<p class="cq">b) No es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e5b-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e5b">Verificar</button><span class="tries" data-tries="e5b"></span></div>
+<div class="fb" data-fb="e5b" aria-live="polite"></div></div>
+<div class="item" id="ej-e5c" data-ex="e5" data-tit="E5 c)">
+<p class="cq">c) Proviene de la envasadora 2 y es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e5c-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e5c">Verificar</button><span class="tries" data-tries="e5c"></span></div>
+<div class="fb" data-fb="e5c" aria-live="polite"></div></div>
+<div class="item" id="ej-e5d" data-ex="e5" data-tit="E5 d)">
+<p class="cq">d) Al menos uno de los dos frascos es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<p class="nnote">Podés redondear a tres decimales.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e5d-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e5d">Verificar</button><span class="tries" data-tries="e5d"></span></div>
+<div class="fb" data-fb="e5d" aria-live="polite"></div></div>
+  </div></div>
+</article>
+</section>
+<section class="tanda" id="co">
+  <div class="tanda-head"><span class="badge">Ejercicios 6 y 7 · adicionales</span><h2>Condicional</h2><p class="tanda-intro">Práctica adicional de probabilidad condicional: no suma al puntaje, pero conviene hacerla. Los dos ejercicios tienen las mismas preguntas con otros datos; compará los resultados.</p></div>
+<article class="ej" id="ex-e6">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 6</h3><span class="ej-pts">adicional</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>Se encuestó a 200 alumnos de 5.º año sobre si practican deporte y si tocan algún instrumento. De los 120 que practican deporte, 48 tocan un instrumento. De los 80 que no practican deporte, 12 tocan un instrumento. Se elige al azar un alumno.</p><p><b>a)</b> Calculá la probabilidad de que toque un instrumento.<br><b>b)</b> Sabiendo que practica deporte, calculá con la fórmula de la probabilidad condicional la probabilidad de que toque un instrumento. ¿Cuántos alumnos forman el nuevo espacio muestral?<br><b>c)</b> Sabiendo que toca un instrumento, calculá la probabilidad de que no practique deporte.<br><b>d)</b> ¿«Practica deporte» y «toca un instrumento» son independientes? Justificá.</p></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e6-0" hidden><span class="hint-n">Pista 1</span> Contá primero cuántos tocan un instrumento en total: los que hacen deporte y los que no.</li><li class="hint" data-hint="e6-1" hidden><span class="hint-n">Pista 2</span> Con la fórmula: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<i>I</i><span class="ob">∩</span><i>D</i>)</span><span class="fd"><i>P</i>(<i>D</i>)</span></span></span>. Escribí las dos probabilidades sobre 200 y mirá qué se simplifica.</li><li class="hint" data-hint="e6-2" hidden><span class="hint-n">Pista 3</span> Para c), el suceso que se sabe es «toca un instrumento»: <span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">∩</span><i>I</i>)</span><span class="fd"><i>P</i>(<i>I</i>)</span></span></span>.</li><li class="hint" data-hint="e6-3" hidden><span class="hint-n">Pista 4</span> Son independientes si saber que practica deporte no cambia la probabilidad: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><i>P</i>(<i>I</i>)</span>.</li></ol>
+    <button type="button" class="btn-ghost" data-more="e6" data-n="4">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e6"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e6">
+<div class="item" id="ej-e6a" data-ex="e6" data-tit="E6 a)">
+<p class="cq">a) Toca un instrumento. </p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e6a-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e6a">Verificar</button><span class="tries" data-tries="e6a"></span></div>
+<div class="fb" data-fb="e6a" aria-live="polite"></div></div>
+<div class="item" id="ej-e6b" data-ex="e6" data-tit="E6 b)">
+<p class="cq">b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral. </p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e6b-0" autocomplete="off"></label>
+<label class="numf"><span>Alumnos del nuevo espacio muestral</span> = <input type="text" inputmode="decimal" data-num="e6b-1" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e6b">Verificar</button><span class="tries" data-tries="e6b"></span></div>
+<div class="fb" data-fb="e6b" aria-live="polite"></div></div>
+<div class="item" id="ej-e6c" data-ex="e6" data-tit="E6 c)">
+<p class="cq">c) No practica deporte, sabiendo que toca un instrumento. </p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e6c-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e6c">Verificar</button><span class="tries" data-tries="e6c"></span></div>
+<div class="fb" data-fb="e6c" aria-live="polite"></div></div>
+<div class="item" id="ej-e6d" data-ex="e6" data-tit="E6 d)">
+<p class="cq">d) ¿«Practica deporte» y «toca un instrumento» son independientes? </p>
+<div class="choices">
+<label class="choice"><input type="radio" name="e6d" value="c"><span>Son independientes, porque <span class="mi"><i>P</i>(<i>D</i><span class="ob">∩</span><i>I</i>)<wbr><span class="os">=</span>0,24<wbr><span class="os">=</span>0,6<span class="ob">·</span>0,4</span>.</span></label>
+<label class="choice"><input type="radio" name="e6d" value="d"><span>No son independientes, porque <span class="mi"><i>P</i>(<i>D</i><span class="ob">∩</span><i>I</i>)<wbr><span class="os">≠</span>0</span>.</span></label>
+<label class="choice"><input type="radio" name="e6d" value="a"><span>No son independientes, porque <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span>0,4</span> y <span class="mi"><i>P</i>(<i>I</i>)<wbr><span class="os">=</span>0,3</span> son distintas.</span></label>
+<label class="choice"><input type="radio" name="e6d" value="e"><span>No se puede saber sin conocer <span class="mi"><i>P</i>(<i>D</i><span class="ob">∪</span><i>I</i>)</span>.</span></label>
+<label class="choice"><input type="radio" name="e6d" value="b"><span>Son independientes, porque practicar deporte no impide tocar un instrumento.</span></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e6d">Verificar</button><span class="tries" data-tries="e6d"></span></div>
+<div class="fb" data-fb="e6d" aria-live="polite"></div></div>
+  </div></div>
+</article>
+<article class="ej" id="ex-e7">
+  <header class="ej-head"><h3 class="ej-tit">Ejercicio 7</h3><span class="ej-pts">adicional</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
+  <div class="enun"><p>En otra escuela se hizo la misma encuesta, esta vez a 300 alumnos. De los 180 que practican deporte, 54 tocan un instrumento. De los 120 que no practican deporte, 96 tocan un instrumento. Se elige al azar un alumno.</p><p><b>a)</b> Calculá la probabilidad de que toque un instrumento.<br><b>b)</b> Sabiendo que practica deporte, calculá con la fórmula de la probabilidad condicional la probabilidad de que toque un instrumento. ¿Cuántos alumnos forman el nuevo espacio muestral?<br><b>c)</b> Sabiendo que toca un instrumento, calculá la probabilidad de que no practique deporte.<br><b>d)</b> ¿«Practica deporte» y «toca un instrumento» son independientes? Justificá y compará los resultados de a) y b) con los del ejercicio 6.</p></div>
+  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e7-0" hidden><span class="hint-n">Pista 1</span> Contá primero cuántos tocan un instrumento en total: los que hacen deporte y los que no.</li><li class="hint" data-hint="e7-1" hidden><span class="hint-n">Pista 2</span> Con la fórmula: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<i>I</i><span class="ob">∩</span><i>D</i>)</span><span class="fd"><i>P</i>(<i>D</i>)</span></span></span>. Escribí las dos probabilidades sobre 300 y mirá qué se simplifica.</li><li class="hint" data-hint="e7-2" hidden><span class="hint-n">Pista 3</span> Para c), el suceso que se sabe es «toca un instrumento»: <span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">∩</span><i>I</i>)</span><span class="fd"><i>P</i>(<i>I</i>)</span></span></span>.</li><li class="hint" data-hint="e7-3" hidden><span class="hint-n">Pista 4</span> Son independientes si saber que practica deporte no cambia la probabilidad: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><i>P</i>(<i>I</i>)</span>.</li></ol>
+    <button type="button" class="btn-ghost" data-more="e7" data-n="4">Pedir una pista</button></div>
+  <div class="check">
+  <label class="gate"><input type="checkbox" data-gate="e7"> Ya tengo el desarrollo completo escrito en la hoja</label>
+  <div class="check-body locked" data-body="e7">
+<div class="item" id="ej-e7a" data-ex="e7" data-tit="E7 a)">
+<p class="cq">a) Toca un instrumento. </p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e7a-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e7a">Verificar</button><span class="tries" data-tries="e7a"></span></div>
+<div class="fb" data-fb="e7a" aria-live="polite"></div></div>
+<div class="item" id="ej-e7b" data-ex="e7" data-tit="E7 b)">
+<p class="cq">b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral. </p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e7b-0" autocomplete="off"></label>
+<label class="numf"><span>Alumnos del nuevo espacio muestral</span> = <input type="text" inputmode="decimal" data-num="e7b-1" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e7b">Verificar</button><span class="tries" data-tries="e7b"></span></div>
+<div class="fb" data-fb="e7b" aria-live="polite"></div></div>
+<div class="item" id="ej-e7c" data-ex="e7" data-tit="E7 c)">
+<p class="cq">c) No practica deporte, sabiendo que toca un instrumento. </p>
+<p class="nnote">Si el resultado es una fracción, escribila con barra (por ejemplo 3/8); si es decimal, con coma.</p>
+<div class="nums">
+<label class="numf"><span><span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e7c-0" autocomplete="off"></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e7c">Verificar</button><span class="tries" data-tries="e7c"></span></div>
+<div class="fb" data-fb="e7c" aria-live="polite"></div></div>
+<div class="item" id="ej-e7d" data-ex="e7" data-tit="E7 d)">
+<p class="cq">d) ¿«Practica deporte» y «toca un instrumento» son independientes? </p>
+<div class="choices">
+<label class="choice"><input type="radio" name="e7d" value="b"><span>Son independientes, porque <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span>0,3</span> es igual al <span class="mi"><i>P</i>(<i>I</i>)</span> del ejercicio 6.</span></label>
+<label class="choice"><input type="radio" name="e7d" value="a"><span>No son independientes: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span>0,3</span> y <span class="mi"><i>P</i>(<i>I</i>)<wbr><span class="os">=</span>0,5</span>. Acá saber que practica deporte baja la probabilidad de tocar un instrumento; en el ejercicio 6 la subía (0,4 contra 0,3).</span></label>
+<label class="choice"><input type="radio" name="e7d" value="d"><span>Son independientes, porque <span class="mi"><i>P</i>(<i>D</i><span class="ob">∩</span><i>I</i>)<wbr><span class="os">=</span>0,18<wbr><span class="os">=</span><i>P</i>(<i>D</i>)<span class="ob">·</span><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span>.</span></label>
+<label class="choice"><input type="radio" name="e7d" value="e"><span>No son independientes, porque son excluyentes.</span></label>
+<label class="choice"><input type="radio" name="e7d" value="c"><span>No son independientes, y en las dos escuelas practicar deporte sube la probabilidad de tocar un instrumento.</span></label>
+</div>
+<div class="check-actions"><button type="button" class="btn" data-check="e7d">Verificar</button><span class="tries" data-tries="e7d"></span></div>
+<div class="fb" data-fb="e7d" aria-live="polite"></div></div>
+  </div></div>
+</article>
+</section>
+<section class="tanda" id="inf">
+  <div class="tanda-head">
+    <span class="badge">Entrega · individual</span>
+    <h2>Informe</h2>
+    <p class="tanda-intro">Subí al menos una foto de tu hoja por cada bloque que trabajaste. Después descargá el PDF y entregalo en la tarea de Classroom. Al final del PDF vas a encontrar la resolución paso a paso de cada ejercicio en el que cerraste al menos un ítem, para comparar con tu desarrollo. El progreso queda guardado en este dispositivo y en este navegador: no cambies de celular o computadora a mitad de camino.</p>
+  </div>
+  <div class="ej">
+    <header class="ej-head"><h3 class="ej-tit">Puntaje</h3><span class="ej-pts" id="pts-total"></span></header>
+    <div class="pts-wrap"><table class="pts"><thead><tr><th>Ítem</th><th>Resultado</th><th>Puntos</th></tr></thead><tbody id="pts-body"></tbody></table></div>
+  </div>
+  <div class="ej">
+    <header class="ej-head"><h3 class="ej-tit">Fotos del desarrollo</h3><span class="ej-pts">Hasta 4 por bloque</span></header>
+    <p class="fconsejo">De frente, con buena luz y con la hoja entera. Si estás en el celular, conviene sacar las fotos con la cámara y después usar «Subir imagen».</p>
+    <div class="fotos" id="fotos"><div class="ftanda"><div class="ftanda-h"><b>Ecuaciones diferenciales</b><div class="fbtns"><label class="fbtn ghost">Subir imagen<input type="file" accept="image/*" data-foto="ed"></label><label class="fbtn">Sacar foto<input type="file" accept="image/*" capture="environment" data-foto="ed"></label></div></div><div class="thumbs" data-thumbs="ed"></div></div><div class="ftanda"><div class="ftanda-h"><b>Probabilidad</b><div class="fbtns"><label class="fbtn ghost">Subir imagen<input type="file" accept="image/*" data-foto="pr"></label><label class="fbtn">Sacar foto<input type="file" accept="image/*" capture="environment" data-foto="pr"></label></div></div><div class="thumbs" data-thumbs="pr"></div></div><div class="ftanda"><div class="ftanda-h"><b>Condicional</b><div class="fbtns"><label class="fbtn ghost">Subir imagen<input type="file" accept="image/*" data-foto="co"></label><label class="fbtn">Sacar foto<input type="file" accept="image/*" capture="environment" data-foto="co"></label></div></div><div class="thumbs" data-thumbs="co"></div></div></div>
+  </div>
+  <div class="ej">
+    <header class="ej-head"><h3 class="ej-tit">Descargar</h3></header>
+    <div class="inf-check" id="inf-check"></div>
+    <div class="check-actions">
+      <button type="button" class="btn" id="btn-pdf">Descargar informe PDF</button>
+      <button type="button" class="btn-ghost plain" id="btn-print">Imprimir o guardar a mano</button>
+    </div>
+    <div class="fb" id="fb-pdf" aria-live="polite"></div>
+  </div>
+</section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-quote">"La matemática no exige genios, exige constancia."</div>
+    <div class="footer-lab">
+      <div class="lab-name"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div>
+      <div class="lab-sub">Prof. Ariel L. Cardozo Delgado</div>
+    </div>
+  </div>
+</footer>
+
+<div id="print-view" aria-hidden="true"></div>
+<div id="res-render" aria-hidden="true"></div>
+
+<script id="ans" type="application/octet-stream">eyJlMSI6IHsidHlwZSI6ICJjaG9pY2UiLCAib2siOiAiYSIsICJmYiI6IHsiYiI6ICJMYSBjb25zdGFudGUgcXVlZMOzIHN1bWFuZG8uIEFsIGFwbGljYXIgbGEgZXhwb25lbmNpYWwgYSBsb3MgZG9zIG1pZW1icm9zLCA8c3BhbiBjbGFzcz1cIm1pXCI+PHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxpPkM8L2k+PC9zdXA+PC9zcGFuPjwvc3Bhbj4gbXVsdGlwbGljYTogPHNwYW4gY2xhc3M9XCJtaVwiPjxpPnk8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+PGk+QTwvaT48c3BhbiBjbGFzcz1cInNxXCI+PHN2ZyB2aWV3Qm94PVwiMCAwIDEwIDI0XCIgcHJlc2VydmVBc3BlY3RSYXRpbz1cIm5vbmVcIiBhcmlhLWhpZGRlbj1cInRydWVcIj48cGF0aCBkPVwiTTAuNiAxNC41IEwyLjggMTQuNSBMNS4yIDIyLjQgTDkuNCAxLjJcIiBmaWxsPVwibm9uZVwiIHN0cm9rZT1cImN1cnJlbnRDb2xvclwiIHN0cm9rZS13aWR0aD1cIjEuMjVcIiBzdHJva2UtbGluZWNhcD1cInJvdW5kXCIgc3Ryb2tlLWxpbmVqb2luPVwicm91bmRcIiB2ZWN0b3ItZWZmZWN0PVwibm9uLXNjYWxpbmctc3Ryb2tlXCIvPjwvc3ZnPjxzcGFuIGNsYXNzPVwic3EtYlwiPjxzcGFuIGNsYXNzPVwiYXRcIj48aT54PC9pPjxzdXA+Mjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjE8L3NwYW4+PC9zcGFuPjwvc3Bhbj48L3NwYW4+LCB5IHJlY2nDqW4gYWjDrSBzZSB1c2EgbGEgY29uZGljacOzbiBpbmljaWFsLiIsICJjIjogIlNlIHBlcmRpw7MgZWwgPHNwYW4gY2xhc3M9XCJtaVwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+PC9zcGFuPjogbGEgaW50ZWdyYWwgZGUgPHNwYW4gY2xhc3M9XCJtaVwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+PGk+eDwvaT48L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjxzcGFuIGNsYXNzPVwiYXRcIj48aT54PC9pPjxzdXA+Mjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjE8L3NwYW4+PC9zcGFuPjwvc3Bhbj4gZXMgPHNwYW4gY2xhc3M9XCJtaVwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+IGxuKDxzcGFuIGNsYXNzPVwiYXRcIj48aT54PC9pPjxzdXA+Mjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjEpPC9zcGFuPiwgeSA8c3BhbiBjbGFzcz1cIm1pXCI+PHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+IGxuKDxpPnU8L2k+KTwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwic3FcIj48c3ZnIHZpZXdCb3g9XCIwIDAgMTAgMjRcIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPVwibm9uZVwiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiPjxwYXRoIGQ9XCJNMC42IDE0LjUgTDIuOCAxNC41IEw1LjIgMjIuNCBMOS40IDEuMlwiIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwiY3VycmVudENvbG9yXCIgc3Ryb2tlLXdpZHRoPVwiMS4yNVwiIHN0cm9rZS1saW5lY2FwPVwicm91bmRcIiBzdHJva2UtbGluZWpvaW49XCJyb3VuZFwiIHZlY3Rvci1lZmZlY3Q9XCJub24tc2NhbGluZy1zdHJva2VcIi8+PC9zdmc+PHNwYW4gY2xhc3M9XCJzcS1iXCI+PGk+dTwvaT48L3NwYW4+PC9zcGFuPjwvc3Bhbj4uIiwgImQiOiAiRGVsIGxhZG8gZGUgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPnk8L2k+PC9zcGFuPiBxdWVkw7MgPHNwYW4gY2xhc3M9XCJtaVwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+ZDxpPnk8L2k+PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj48aT55PC9pPjwvc3Bhbj48L3NwYW4+PC9zcGFuPiwgeSBzdSBpbnRlZ3JhbCBlcyA8c3BhbiBjbGFzcz1cIm1pXCI+bG58PGk+eTwvaT58PC9zcGFuPiwgbm8gPHNwYW4gY2xhc3M9XCJtaVwiPjxpPnk8L2k+PC9zcGFuPi4gRmFsdGEgZGVzcGVqYXIgY29uIGxhIGV4cG9uZW5jaWFsLiIsICJlIjogIlNlIGludGVncsOzIDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjxpPng8L2k+PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj48c3BhbiBjbGFzcz1cImF0XCI+PGk+eDwvaT48c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj4xPC9zcGFuPjwvc3Bhbj48L3NwYW4+IGNvbW8gc2kgZnVlcmEgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPng8L2k+PC9zcGFuPi4gQ29uIDxzcGFuIGNsYXNzPVwibWlcIj48aT51PC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJhdFwiPjxpPng8L2k+PHN1cD4yPC9zdXA+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MTwvc3Bhbj4gbGEgaW50ZWdyYWwgZGEgPHNwYW4gY2xhc3M9XCJtaVwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+IGxuKDxzcGFuIGNsYXNzPVwiYXRcIj48aT54PC9pPjxzdXA+Mjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjEpPC9zcGFuPi4ifSwgImZib2siOiAiQmllbjogPHNwYW4gY2xhc3M9XCJtaVwiPjxpPnk8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+NTxzcGFuIGNsYXNzPVwic3FcIj48c3ZnIHZpZXdCb3g9XCIwIDAgMTAgMjRcIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPVwibm9uZVwiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiPjxwYXRoIGQ9XCJNMC42IDE0LjUgTDIuOCAxNC41IEw1LjIgMjIuNCBMOS40IDEuMlwiIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwiY3VycmVudENvbG9yXCIgc3Ryb2tlLXdpZHRoPVwiMS4yNVwiIHN0cm9rZS1saW5lY2FwPVwicm91bmRcIiBzdHJva2UtbGluZWpvaW49XCJyb3VuZFwiIHZlY3Rvci1lZmZlY3Q9XCJub24tc2NhbGluZy1zdHJva2VcIi8+PC9zdmc+PHNwYW4gY2xhc3M9XCJzcS1iXCI+PHNwYW4gY2xhc3M9XCJhdFwiPjxpPng8L2k+PHN1cD4yPC9zdXA+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MTwvc3Bhbj48L3NwYW4+PC9zcGFuPjwvc3Bhbj4uIENvbnRyb2zDoTogZW4gPHNwYW4gY2xhc3M9XCJtaVwiPjxpPng8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wPC9zcGFuPiBkYSA8c3BhbiBjbGFzcz1cIm1pXCI+PHNwYW4gY2xhc3M9XCJhdFwiPjU8c3BhbiBjbGFzcz1cInNxXCI+PHN2ZyB2aWV3Qm94PVwiMCAwIDEwIDI0XCIgcHJlc2VydmVBc3BlY3RSYXRpbz1cIm5vbmVcIiBhcmlhLWhpZGRlbj1cInRydWVcIj48cGF0aCBkPVwiTTAuNiAxNC41IEwyLjggMTQuNSBMNS4yIDIyLjQgTDkuNCAxLjJcIiBmaWxsPVwibm9uZVwiIHN0cm9rZT1cImN1cnJlbnRDb2xvclwiIHN0cm9rZS13aWR0aD1cIjEuMjVcIiBzdHJva2UtbGluZWNhcD1cInJvdW5kXCIgc3Ryb2tlLWxpbmVqb2luPVwicm91bmRcIiB2ZWN0b3ItZWZmZWN0PVwibm9uLXNjYWxpbmctc3Ryb2tlXCIvPjwvc3ZnPjxzcGFuIGNsYXNzPVwic3EtYlwiPjE8L3NwYW4+PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjU8L3NwYW4+LiJ9LCAiZTJhIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWzgwXSwgInRvbCI6IDFlLTA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5BPC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+ODA8L3NwYW4+LCBhc8OtIHF1ZSA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+VDwvaT4oPGk+dDwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4yMDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+ODAgPHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxpPks8L2k+PGk+dDwvaT48L3N1cD48L3NwYW4+PC9zcGFuPi4gRWwgODAgZXMgbGEgZGlmZXJlbmNpYSBpbmljaWFsIGVudHJlIGVsIHTDqSB5IGxhIGhhYml0YWNpw7NuLiJ9LCAiZTJiIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWy0wLjE3MzI4Njc5NTE0XSwgInRvbCI6IDAuMDAwNn1dLCAiZmJvayI6ICJCaWVuOiA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+SzwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+bG4gPHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4yPC9zcGFuPjwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjQ8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKJiDwvc3Bhbj48c3BhbiBjbGFzcz1cIm91XCI+4oiSPC9zcGFuPjAsMTczMzwvc3Bhbj4uIEVzIG5lZ2F0aXZhIHBvcnF1ZSBsYSB0ZW1wZXJhdHVyYSBiYWphLiJ9LCAiZTJjIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWzQwXSwgInRvbCI6IDAuMDV9XSwgImZib2siOiAiQmllbjogPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlQ8L2k+KDgpPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4yMDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+ODA8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJhdFwiPig8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjI8L3NwYW4+PC9zcGFuPik8c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj40MDwvc3Bhbj4gwrBDLiBDYWRhIDQgbWludXRvcyBsYSBkaWZlcmVuY2lhIGNvbiBlbCBhbWJpZW50ZSBzZSByZWR1Y2UgYSBsYSBtaXRhZC4ifSwgImUyZCI6IHsidHlwZSI6ICJudW1zIiwgIm9rIjogW3sidiI6IFsxNl0sICJ0b2wiOiAwLjAyfV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT50PC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MTY8L3NwYW4+IG1pbnV0b3MuIExhIGRpZmVyZW5jaWEgcGFzYSBkZSA4MCBhIDUsIG8gc2VhIHNlIGRpdmlkZSBwb3IgMTYgPSAy4oG0OiBjdWF0cm8gdmVjZXMgNCBtaW51dG9zLiJ9LCAiZTNhIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWzAuMDgzMzMzMzMzMzMzMzMzMzNdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEwPC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj40PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj45PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4zPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj44PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MTI8L3NwYW4+PC9zcGFuPjwvc3Bhbj4uIn0sICJlM2IiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC45MTY2NjY2NjY2NjY2NjY2XSwgInRvbCI6IDAuMDAwNn1dLCAiZmJvayI6ICJCaWVuOiA8c3BhbiBjbGFzcz1cIm1pXCI+MTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEyPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEyPC9zcGFuPjwvc3Bhbj48L3NwYW4+LCBwb3IgY29tcGxlbWVudG8uIn0sICJlM2MiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC40MTY2NjY2NjY2NjY2NjY3XSwgInRvbCI6IDAuMDAwNn1dLCAiZmJvayI6ICJCaWVuOiA8c3BhbiBjbGFzcz1cIm1pXCI+MzxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEwPC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj40PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj45PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj44PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MTI8L3NwYW4+PC9zcGFuPjwvc3Bhbj4uIn0sICJlM2QiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC42MjVdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjg8L3NwYW4+PC9zcGFuPjwvc3Bhbj4uIFF1ZWRhbiA4IGJvbGl0YXMgeSBsYXMgNSByb2phcyBzaWd1ZW4gZW4gbGEgYm9sc2EuIn0sICJlNGEiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC43XSwgInRvbCI6IDAuMDAwNn0sIHsidiI6IFswLjJdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5BPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7iiKo8L3NwYW4+PGk+QjwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDc8L3NwYW4+IHkgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5CPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MCw0PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjAsNzx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwyPC9zcGFuPi4ifSwgImU0YiI6IHsidHlwZSI6ICJudW1zIiwgIm9rIjogW3sidiI6IFswLjNdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5BPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj7iiJI8L3NwYW4+PGk+UDwvaT4oPGk+QTwvaT48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCw1PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjAsMjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwzPC9zcGFuPi4ifSwgImU0YyI6IHsidHlwZSI6ICJjaG9pY2UiLCAib2siOiAiYSIsICJmYiI6IHsiYiI6ICJQYXJhIHNlciBleGNsdXllbnRlcywgbGEgaW50ZXJzZWNjacOzbiB0aWVuZSBxdWUgdmFsZXIgMCwgeSBhY8OhIHZhbGUgMCwyLiIsICJjIjogIkNvbXBhcsOhIDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5BPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7iiKk8L3NwYW4+PGk+QjwvaT4pPC9zcGFuPiBjb24gZWwgcHJvZHVjdG8gPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkE8L2k+KTxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48aT5QPC9pPig8aT5CPC9pPik8L3NwYW4+OiDCv3NvbiBkaXN0aW50b3M/IiwgImQiOiAiUmV2aXPDoSBsYXMgZG9zIGNvc2FzOiBleGNsdXllbnRlcyBwaWRlIDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5BPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7iiKk8L3NwYW4+PGk+QjwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wPC9zcGFuPiwgZSBpbmRlcGVuZGllbnRlcywgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5CPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxpPlA8L2k+KDxpPkE8L2k+KTxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48aT5QPC9pPig8aT5CPC9pPik8L3NwYW4+LiIsICJlIjogIlF1ZSBsYSBzdW1hIG5vIGTDqSAxIG5vIGRpY2UgbmFkYSBzb2JyZSBzaSBzb24gZXhjbHV5ZW50ZXMgKGVzbyB0ZW5kcsOtYSBxdWUgdmVyIGNvbiBzdWNlc29zIGNvbXBsZW1lbnRhcmlvcykuIEV4Y2x1eWVudGVzIHNpZ25pZmljYSA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+QTwvaT48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MDwvc3Bhbj4uIn0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5BPC9pPik8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PGk+UDwvaT4oPGk+QjwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDU8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCw0PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDI8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxpPlA8L2k+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5CPC9pPik8L3NwYW4+LCBhc8OtIHF1ZSBzb24gaW5kZXBlbmRpZW50ZXM7IHkgY29tbyA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+QTwvaT48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKJoDwvc3Bhbj4wPC9zcGFuPiwgcHVlZGVuIG9jdXJyaXIganVudG9zOiBubyBzb24gZXhjbHV5ZW50ZXMuIn0sICJlNWEiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC4wMzFdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj4wLDU8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCwwMjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MCwzPHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjAsMDM8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjAsMjxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj4wLDA2PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDAzMTwvc3Bhbj4uIn0sICJlNWIiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC45NjldLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj4xPHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjAsMDMxPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDk2OTwvc3Bhbj4uIn0sICJlNWMiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC4wMDldLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj4wLDM8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCwwMzx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwwMDk8L3NwYW4+LiBFcyB1bmEgc29sYSByYW1hOiBubyBlcyB1bmEgcHJvYmFiaWxpZGFkIGNvbmRpY2lvbmFsLiJ9LCAiZTVkIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWzAuMDYxMDM5XSwgInRvbCI6IDAuMDAwNn1dLCAiZmJvayI6ICJCaWVuOiA8c3BhbiBjbGFzcz1cIm1pXCI+MTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+MCw5Njk8c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+4omIPC9zcGFuPjAsMDYxPC9zcGFuPi4ifSwgImU2YSI6IHsidHlwZSI6ICJudW1zIiwgIm9rIjogW3sidiI6IFswLjNdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NDg8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjEyPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4yMDA8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj42MDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MjAwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMzwvc3Bhbj4uIn0sICJlNmIiOiB7InR5cGUiOiAibnVtcyIsICJvayI6IFt7InYiOiBbMC40XSwgInRvbCI6IDAuMDAwNn0sIHsidiI6IFsxMjBdLCAidG9sIjogMWUtMDZ9XSwgImZib2siOiAiQmllbjogPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkk8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RDwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NDg8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjIwMDwvc3Bhbj48L3NwYW4+PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjEyMDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MjAwPC9zcGFuPjwvc3Bhbj48L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj40ODwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MTIwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNDwvc3Bhbj4uIEFsIHNhYmVyIHF1ZSBwcmFjdGljYSBkZXBvcnRlLCBlbCBlc3BhY2lvIG11ZXN0cmFsIHBhc2EgYSBzZXIgbG9zIDEyMCBxdWUgbG8gcHJhY3RpY2FuLiJ9LCAiZTZjIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWzAuMl0sICJ0b2wiOiAwLjAwMDZ9XSwgImZib2siOiAiQmllbjogPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxzcGFuIGNsYXNzPVwiYXRcIj48aT5EPC9pPjxzdXA+Yzwvc3VwPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+fDwvc3Bhbj48aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTI8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjYwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMjwvc3Bhbj4uIEFob3JhIGVsIGVzcGFjaW8gbXVlc3RyYWwgc29uIGxvcyA2MCBxdWUgdG9jYW4gdW4gaW5zdHJ1bWVudG8uIn0sICJlNmQiOiB7InR5cGUiOiAiY2hvaWNlIiwgIm9rIjogImEiLCAiZmIiOiB7ImIiOiAiUXVlIHVuYSBjb3NhIG5vIGltcGlkYSBsYSBvdHJhIGRpY2UgcXVlIG5vIHNvbiBleGNsdXllbnRlcy4gTGEgaW5kZXBlbmRlbmNpYSBzZSBkZWNpZGUgY29tcGFyYW5kbyA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+STwvaT48c3BhbiBjbGFzcz1cIm9iXCI+fDwvc3Bhbj48aT5EPC9pPik8L3NwYW4+IGNvbiA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+STwvaT4pPC9zcGFuPi4iLCAiYyI6ICJFbiBlc2UgcHJvZHVjdG8sIDAsNCBlcyA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+STwvaT48c3BhbiBjbGFzcz1cIm9iXCI+fDwvc3Bhbj48aT5EPC9pPik8L3NwYW4+LCBubyA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+STwvaT4pPC9zcGFuPi4gQ29uIDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMzwvc3Bhbj46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5EPC9pPik8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PGk+UDwvaT4oPGk+STwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDY8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCwzPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDE4PC9zcGFuPiwgcXVlIG5vIGVzIDAsMjQuIiwgImQiOiAiTGEgY29uY2x1c2nDs24gZXN0w6EgYmllbiwgcGVybyBsYSByYXrDs24gbm86IHF1ZSBsYSBpbnRlcnNlY2Npw7NuIG5vIHNlYSAwIGRpY2UgcXVlIG5vIHNvbiBleGNsdXllbnRlcy4gUGFyYSBpbmRlcGVuZGVuY2lhIGhheSBxdWUgY29tcGFyYXIgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkk8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RDwvaT4pPC9zcGFuPiBjb24gPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkk8L2k+KTwvc3Bhbj4uIiwgImUiOiAiQ29uIGxhIHRhYmxhIGFsY2FuemE6IGNvbXBhcsOhIDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkQ8L2k+KTwvc3Bhbj4gY29uIDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPik8L3NwYW4+LiJ9LCAiZmJvayI6ICJCaWVuOiA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+STwvaT48c3BhbiBjbGFzcz1cIm9iXCI+fDwvc3Bhbj48aT5EPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNDx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKJoDwvc3Bhbj4wLDM8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxpPlA8L2k+KDxpPkk8L2k+KTwvc3Bhbj4uIFNhYmVyIHF1ZSBwcmFjdGljYSBkZXBvcnRlIGNhbWJpYSBsYSBwcm9iYWJpbGlkYWQ6IG5vIHNvbiBpbmRlcGVuZGllbnRlcy4ifSwgImU3YSI6IHsidHlwZSI6ICJudW1zIiwgIm9rIjogW3sidiI6IFswLjVdLCAidG9sIjogMC4wMDA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTQ8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjk2PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4zMDA8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xNTA8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjMwMDwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDU8L3NwYW4+LiJ9LCAiZTdiIjogeyJ0eXBlIjogIm51bXMiLCAib2siOiBbeyJ2IjogWzAuM10sICJ0b2wiOiAwLjAwMDZ9LCB7InYiOiBbMTgwXSwgInRvbCI6IDFlLTA2fV0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU0PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4zMDA8L3NwYW4+PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xODA8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjMwMDwvc3Bhbj48L3NwYW4+PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTQ8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjE4MDwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDM8L3NwYW4+LiBBbCBzYWJlciBxdWUgcHJhY3RpY2EgZGVwb3J0ZSwgZWwgZXNwYWNpbyBtdWVzdHJhbCBwYXNhIGEgc2VyIGxvcyAxODAgcXVlIGxvIHByYWN0aWNhbi4ifSwgImU3YyI6IHsidHlwZSI6ICJudW1zIiwgIm9rIjogW3sidiI6IFswLjY0XSwgInRvbCI6IDAuMDAwNn1dLCAiZmJvayI6ICJCaWVuOiA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPHNwYW4gY2xhc3M9XCJhdFwiPjxpPkQ8L2k+PHN1cD5jPC9zdXA+PC9zcGFuPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkk8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj45Njwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MTUwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNjQ8L3NwYW4+LiBBaG9yYSBlbCBlc3BhY2lvIG11ZXN0cmFsIHNvbiBsb3MgMTUwIHF1ZSB0b2NhbiB1biBpbnN0cnVtZW50by4ifSwgImU3ZCI6IHsidHlwZSI6ICJjaG9pY2UiLCAib2siOiAiYSIsICJmYiI6IHsiYiI6ICJIYXkgcXVlIGNvbXBhcmFyIGNvbiA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+UDwvaT4oPGk+STwvaT4pPC9zcGFuPiBkZSBlc3RhIG1pc21hIGVzY3VlbGEsIHF1ZSBlcyAwLDUuIiwgImMiOiAiRW4gZXN0YSBlc2N1ZWxhIDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwzPC9zcGFuPiBlcyBtZW5vciBxdWUgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkk8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCw1PC9zcGFuPjogcHJhY3RpY2FyIGRlcG9ydGUgbGEgYmFqYS4iLCAiZCI6ICJFc2EgaWd1YWxkYWQgdmFsZSBzaWVtcHJlOiBlcyBsYSByZWdsYSBkZWwgcHJvZHVjdG8uIFBhcmEgaW5kZXBlbmRlbmNpYSwgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkQ8L2k+KTxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48aT5QPC9pPig8aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNjxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj4wLDU8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMzwvc3Bhbj4sIHkgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkQ8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMTg8L3NwYW4+IG5vIGVzIDAsMy4iLCAiZSI6ICJIYXkgNTQgYWx1bW5vcyBxdWUgaGFjZW4gbGFzIGRvcyBjb3NhczogcHVlZGVuIG9jdXJyaXIganVudG9zLCBhc8OtIHF1ZSBubyBzb24gZXhjbHV5ZW50ZXMuIn0sICJmYm9rIjogIkJpZW46IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwzPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+4omgPC9zcGFuPjAsNTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PGk+UDwvaT4oPGk+STwvaT4pPC9zcGFuPi4gRW4gZXN0YSBlc2N1ZWxhIGVsIGRlcG9ydGUgYmFqYSBsYSBwcm9iYWJpbGlkYWQgZGUgdG9jYXIgdW4gaW5zdHJ1bWVudG87IGVuIGxhIGRlbCBlamVyY2ljaW8gNiBsYSBzdWLDrWEuIn19</script>
+<script id="res" type="application/octet-stream">eyJlMSI6ICI8ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5TZXBhcmFyIGxhcyB2YXJpYWJsZXM8L2g1PjxwPkVzY3JpYmltb3MgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPnk8L2k+4oCyPC9zcGFuPiBjb21vIDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPmQ8aT55PC9pPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+ZDxpPng8L2k+PC9zcGFuPjwvc3Bhbj48L3NwYW4+IHkgcGFzYW1vcyA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+eTwvaT48L3NwYW4+IGRpdmlkaWVuZG8geSA8c3BhbiBjbGFzcz1cIm1pXCI+ZDxpPng8L2k+PC9zcGFuPiBtdWx0aXBsaWNhbmRvLjwvcD48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPmQ8aT55PC9pPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PGk+eTwvaT48L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj48aT54PC9pPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PHNwYW4gY2xhc3M9XCJhdFwiPjxpPng8L2k+PHN1cD4yPC9zdXA+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MTwvc3Bhbj48L3NwYW4+IGQ8aT54PC9pPjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5zZXBhcmFjacOzbiBkZSB2YXJpYWJsZXM8L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+SW50ZWdyYXIgbG9zIGRvcyBtaWVtYnJvczwvaDU+PHA+QSBsYSBpenF1aWVyZGEsIGxhIGludGVncmFsIGRlIDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjxpPnk8L2k+PC9zcGFuPjwvc3Bhbj48L3NwYW4+LiBBIGxhIGRlcmVjaGEsIGNvbiA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+dTwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiYXRcIj48aT54PC9pPjxzdXA+Mjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjE8L3NwYW4+IHkgPHNwYW4gY2xhc3M9XCJtaVwiPmQ8aT51PC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MjxpPng8L2k+IGQ8aT54PC9pPjwvc3Bhbj4sIG8gc2VhIDxzcGFuIGNsYXNzPVwibWlcIj48aT54PC9pPiBkPGk+eDwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+IGQ8aT51PC9pPjwvc3Bhbj4uPC9wPjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPmxufDxpPnk8L2k+fDx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4yPC9zcGFuPjwvc3Bhbj4gbG4oPHNwYW4gY2xhc3M9XCJhdFwiPjxpPng8L2k+PHN1cD4yPC9zdXA+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MSk8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjxpPkM8L2k+PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPuKIqyA8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPmQ8aT51PC9pPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PGk+dTwvaT48L3NwYW4+PC9zcGFuPiA9IGxufDxpPnU8L2k+fDwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5EZXNwZWphciB5PC9oNT48cD5BcGxpY2Ftb3MgbGEgZXhwb25lbmNpYWwgYSBsb3MgZG9zIG1pZW1icm9zLiA8c3BhbiBjbGFzcz1cIm1pXCI+PHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxpPkM8L2k+PC9zdXA+PC9zcGFuPjwvc3Bhbj4gZXMgdW4gbsO6bWVybyBwb3NpdGl2byBxdWUgbXVsdGlwbGljYTogbG8gbGxhbWFtb3MgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPkE8L2k+PC9zcGFuPi48L3A+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+eTwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiYXRcIj5lPHN1cD48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjI8L3NwYW4+PC9zcGFuPiBsbig8c3BhbiBjbGFzcz1cImF0XCI+PGk+eDwvaT48c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj4xKTwvc3VwPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxpPkM8L2k+PC9zdXA+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJhdFwiPjxpPkE8L2k+PHNwYW4gY2xhc3M9XCJzcVwiPjxzdmcgdmlld0JveD1cIjAgMCAxMCAyNFwiIHByZXNlcnZlQXNwZWN0UmF0aW89XCJub25lXCIgYXJpYS1oaWRkZW49XCJ0cnVlXCI+PHBhdGggZD1cIk0wLjYgMTQuNSBMMi44IDE0LjUgTDUuMiAyMi40IEw5LjQgMS4yXCIgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJjdXJyZW50Q29sb3JcIiBzdHJva2Utd2lkdGg9XCIxLjI1XCIgc3Ryb2tlLWxpbmVjYXA9XCJyb3VuZFwiIHN0cm9rZS1saW5lam9pbj1cInJvdW5kXCIgdmVjdG9yLWVmZmVjdD1cIm5vbi1zY2FsaW5nLXN0cm9rZVwiLz48L3N2Zz48c3BhbiBjbGFzcz1cInNxLWJcIj48c3BhbiBjbGFzcz1cImF0XCI+PGk+eDwvaT48c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj4xPC9zcGFuPjwvc3Bhbj48L3NwYW4+PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPjxzcGFuIGNsYXNzPVwiYXRcIj5lPHN1cD5sbiA8aT51PC9pPjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxpPnU8L2k+IDsgPHNwYW4gY2xhc3M9XCJhdFwiPjxpPnU8L2k+PHN1cD48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjI8L3NwYW4+PC9zcGFuPjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwic3FcIj48c3ZnIHZpZXdCb3g9XCIwIDAgMTAgMjRcIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPVwibm9uZVwiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiPjxwYXRoIGQ9XCJNMC42IDE0LjUgTDIuOCAxNC41IEw1LjIgMjIuNCBMOS40IDEuMlwiIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwiY3VycmVudENvbG9yXCIgc3Ryb2tlLXdpZHRoPVwiMS4yNVwiIHN0cm9rZS1saW5lY2FwPVwicm91bmRcIiBzdHJva2UtbGluZWpvaW49XCJyb3VuZFwiIHZlY3Rvci1lZmZlY3Q9XCJub24tc2NhbGluZy1zdHJva2VcIi8+PC9zdmc+PHNwYW4gY2xhc3M9XCJzcS1iXCI+PGk+dTwvaT48L3NwYW4+PC9zcGFuPjwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5Vc2FyIGxhIGNvbmRpY2nDs24gaW5pY2lhbDwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+eTwvaT4oMCk8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiYXRcIj48aT5BPC9pPjxzcGFuIGNsYXNzPVwic3FcIj48c3ZnIHZpZXdCb3g9XCIwIDAgMTAgMjRcIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPVwibm9uZVwiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiPjxwYXRoIGQ9XCJNMC42IDE0LjUgTDIuOCAxNC41IEw1LjIgMjIuNCBMOS40IDEuMlwiIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwiY3VycmVudENvbG9yXCIgc3Ryb2tlLXdpZHRoPVwiMS4yNVwiIHN0cm9rZS1saW5lY2FwPVwicm91bmRcIiBzdHJva2UtbGluZWpvaW49XCJyb3VuZFwiIHZlY3Rvci1lZmZlY3Q9XCJub24tc2NhbGluZy1zdHJva2VcIi8+PC9zdmc+PHNwYW4gY2xhc3M9XCJzcS1iXCI+MDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MTwvc3Bhbj48L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PGk+QTwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjU8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+eSgwKSA9IDU8L3NwYW4+PC9kaXY+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGI+PGk+eTwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiYXRcIj41PHNwYW4gY2xhc3M9XCJzcVwiPjxzdmcgdmlld0JveD1cIjAgMCAxMCAyNFwiIHByZXNlcnZlQXNwZWN0UmF0aW89XCJub25lXCIgYXJpYS1oaWRkZW49XCJ0cnVlXCI+PHBhdGggZD1cIk0wLjYgMTQuNSBMMi44IDE0LjUgTDUuMiAyMi40IEw5LjQgMS4yXCIgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJjdXJyZW50Q29sb3JcIiBzdHJva2Utd2lkdGg9XCIxLjI1XCIgc3Ryb2tlLWxpbmVjYXA9XCJyb3VuZFwiIHN0cm9rZS1saW5lam9pbj1cInJvdW5kXCIgdmVjdG9yLWVmZmVjdD1cIm5vbi1zY2FsaW5nLXN0cm9rZVwiLz48L3N2Zz48c3BhbiBjbGFzcz1cInNxLWJcIj48c3BhbiBjbGFzcz1cImF0XCI+PGk+eDwvaT48c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj4xPC9zcGFuPjwvc3Bhbj48L3NwYW4+PC9iPjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5zb2x1Y2nDs24gZW4gZm9ybWEgZXhwbMOtY2l0YTwvc3Bhbj48L2Rpdj48L2Rpdj4iLCAiZTIiOiAiPGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+UGxhbnRlYXIgeSBzZXBhcmFyPC9oNT48cD5MYSB2ZWxvY2lkYWQgZGUgY2FtYmlvIGRlIGxhIHRlbXBlcmF0dXJhIGVzIDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPmQ8aT5UPC9pPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+ZDxpPnQ8L2k+PC9zcGFuPjwvc3Bhbj48L3NwYW4+IHkgbGEgZGlmZXJlbmNpYSBjb24gZWwgYW1iaWVudGUgZXMgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlQ8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjIwPC9zcGFuPi48L3A+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj5kPGk+VDwvaT48L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPmQ8aT50PC9pPjwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48aT5LPC9pPig8aT5UPC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj4yMCk8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj7ih5I8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj5kPGk+VDwvaT48L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjxpPlQ8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjIwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxpPks8L2k+IGQ8aT50PC9pPjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5sZXkgZGUgTmV3dG9uLCBU4oKQID0gMjA8L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+SW50ZWdyYXIgeSBkZXNwZWphciBUPC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj5sbnw8aT5UPC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj4yMHw8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxpPks8L2k+PGk+dDwvaT48d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjxpPkM8L2k+PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPuKIqyA8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPmQ8aT51PC9pPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PGk+dTwvaT48L3NwYW4+PC9zcGFuPiA9IGxufDxpPnU8L2k+fDwvc3Bhbj48L2Rpdj48cD5BcGxpY2Ftb3MgbGEgZXhwb25lbmNpYWw7IDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImF0XCI+ZTxzdXA+PGk+QzwvaT48L3N1cD48L3NwYW4+PC9zcGFuPiBwYXNhIGEgbXVsdGlwbGljYXIgeSBsbyBsbGFtYW1vcyA8c3BhbiBjbGFzcz1cIm1pXCI+PGk+QTwvaT48L3NwYW4+LjwvcD48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5UPC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MjA8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjxpPkE8L2k+IDxzcGFuIGNsYXNzPVwiYXRcIj5lPHN1cD48aT5LPC9pPjxpPnQ8L2k+PC9zdXA+PC9zcGFuPjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5zb2x1Y2nDs24gZ2VuZXJhbDwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5hKSBMYSBjb25zdGFudGUgQTwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+VDwvaT4oMCk8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjIwPHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj48aT5BPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+ZTxzdXA+MDwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjEwMDx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKHkjwvc3Bhbj48aT5BPC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+ODA8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+VCgwKSA9IDEwMCwgZeKBsCA9IDE8L3NwYW4+PC9kaXY+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGI+PGk+VDwvaT4oPGk+dDwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4yMDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+ODAgPHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxpPks8L2k+PGk+dDwvaT48L3N1cD48L3NwYW4+PC9iPjwvZGl2PjwvZGl2PjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmIpIExhIGNvbnN0YW50ZSBLPC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj4yMDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+ODAgPHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjQ8aT5LPC9pPjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjYwPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+4oeSPC9zcGFuPjxzcGFuIGNsYXNzPVwiYXRcIj5lPHN1cD40PGk+SzwvaT48L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjQwPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj44MDwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjI8L3NwYW4+PC9zcGFuPjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5UKDQpID0gNjA8L3NwYW4+PC9kaXY+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+NDxpPks8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj5sbiA8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjI8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKHkjwvc3Bhbj48aT5LPC9pPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj5sbiA8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjI8L3NwYW4+PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+NDwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+4omIPC9zcGFuPjxzcGFuIGNsYXNzPVwib3VcIj7iiJI8L3NwYW4+MCwxNzMzPC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPmxuIGRlIGxvcyBkb3MgbWllbWJyb3M8L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YykgVGVtcGVyYXR1cmEgYSBsb3MgOCBtaW51dG9zPC9oNT48cD5Db21vIDxzcGFuIGNsYXNzPVwibWlcIj48c3BhbiBjbGFzcz1cImF0XCI+ZTxzdXA+ODxpPks8L2k+PC9zdXA+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJhdFwiPig8c3BhbiBjbGFzcz1cImF0XCI+ZTxzdXA+NDxpPks8L2k+PC9zdXA+PC9zcGFuPik8c3VwPjI8L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+KDxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+KTxzdXA+Mjwvc3VwPjwvc3Bhbj48L3NwYW4+LCBubyBoYWNlIGZhbHRhIGVsIGRlY2ltYWwgZGUgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPks8L2k+PC9zcGFuPi48L3A+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+VDwvaT4oOCk8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjIwPHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj44MDxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjQ8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+NDA8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+cHJvcGllZGFkIGRlIHBvdGVuY2lhczwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5kKSBDdcOhbmRvIGxsZWdhIGEgMjUgwrBDPC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj4yMDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+ODAgPHNwYW4gY2xhc3M9XCJhdFwiPmU8c3VwPjxpPks8L2k+PGk+dDwvaT48L3N1cD48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4yNTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKHkjwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+ZTxzdXA+PGk+SzwvaT48aT50PC9pPjwvc3VwPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+ODA8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xNjwvc3Bhbj48L3NwYW4+PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPlQodCkgPSAyNTwvc3Bhbj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5LPC9pPjxpPnQ8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj5sbiA8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjE2PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjQgbG4gPHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4yPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjQ8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+NDxpPks8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+4oeSPC9zcGFuPjxpPnQ8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4xNjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5sbiA8c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjE2PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjQgbG4gPHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4yPC9zcGFuPjwvc3Bhbj4gOyA0PGk+SzwvaT48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPmxuIDxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+Mjwvc3Bhbj48L3NwYW4+PC9zcGFuPjwvZGl2PjxwPkNvbiBsYSBjYWxjdWxhZG9yYTogPHNwYW4gY2xhc3M9XCJtaVwiPjxpPnQ8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPmxuIDxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MTY8L3NwYW4+PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PHNwYW4gY2xhc3M9XCJvdVwiPuKIkjwvc3Bhbj4wLDE3MzM8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKJiDwvc3Bhbj4xNjwvc3Bhbj4uPC9wPjxwPkxsZWdhIGEgMjUgwrBDIGEgbG9zIDxiPjE2IG1pbnV0b3M8L2I+LjwvcD48L2Rpdj4iLCAiZTMiOiAiPGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+RWwgw6FyYm9sPC9oNT48cD5BbCBwcmluY2lwaW8gaGF5IDEwIGJvbGl0YXMsIDUgcm9qYXMgeSA1IHZlcmRlcy4gQ2FkYSB2ZXogcXVlIHNhY2Ftb3MgdW5hLCBsYSBib2xzYSB0aWVuZSB1bmEgbWVub3MsIHkgdGFtYmnDqW4gdW5hIG1lbm9zIGRlbCBjb2xvciBxdWUgc2FsacOzLjwvcD48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5hKSBMYXMgdHJlcyByb2phczwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+UjwvaT48aT5SPC9pPjxpPlI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xMDwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+OTwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+Mzwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+ODwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjYwPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj43MjA8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xMjwvc3Bhbj48L3NwYW4+PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPnJlZ2xhIGRlbCBwcm9kdWN0bzwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5iKSBBbCBtZW5vcyB1bmEgdmVyZGU8L2g1PjxwPkxvIGNvbnRyYXJpbyBkZSDCq2FsIG1lbm9zIHVuYSB2ZXJkZcK7IGVzIMKrbmluZ3VuYSB2ZXJkZcK7LCBlcyBkZWNpciwgbGFzIHRyZXMgcm9qYXMuPC9wPjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KGFsIG1lbm9zIHVuYSA8aT5WPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjE8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj7iiJI8L3NwYW4+PGk+UDwvaT4oPGk+UjwvaT48aT5SPC9pPjxpPlI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEyPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTE8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEyPC9zcGFuPjwvc3Bhbj48L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+Y29tcGxlbWVudG88L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YykgRXhhY3RhbWVudGUgZG9zIHJvamFzPC9oNT48cD5IYXkgdHJlcyByYW1hcyBjb24gZG9zIHJvamFzIHkgdW5hIHZlcmRlLiBDYWxjdWxhbW9zIHVuYSB5IHZlbW9zIHF1ZSBsYXMgb3RyYXMgdGllbmVuIGxvcyBtaXNtb3MgZmFjdG9yZXMgZW4gb3RybyBvcmRlbi48L3A+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+UjwvaT48aT5SPC9pPjxpPlY8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xMDwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+OTwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+ODwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjEwMDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+NzIwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MzY8L3NwYW4+PC9zcGFuPjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5yZWdsYSBkZWwgcHJvZHVjdG88L3NwYW4+PC9kaXY+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+UjwvaT48aT5WPC9pPjxpPlI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xMDwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+OTwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+ODwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjM2PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cImdhcFwiPjwvc3Bhbj48aT5QPC9pPig8aT5WPC9pPjxpPlI8L2k+PGk+UjwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEwPC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj45PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj40PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj44PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MzY8L3NwYW4+PC9zcGFuPjwvZGl2PjwvZGl2PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4zPHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MzY8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xNTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MzY8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xMjwvc3Bhbj48L3NwYW4+PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPnJhbWFzIGV4Y2x1eWVudGVzOiBzZSBzdW1hbjwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5kKSBUZXJjZXJhIHJvamEsIHNhYmllbmRvIHF1ZSBsYXMgZG9zIHByaW1lcmFzIGZ1ZXJvbiB2ZXJkZXM8L2g1PjxwPllhIHNhbGllcm9uIGRvcyB2ZXJkZXM6IHF1ZWRhbiA4IGJvbGl0YXMsIDUgcm9qYXMgeSAzIHZlcmRlcy48L3A+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+UjwvaT48c3ViPjM8L3N1Yj48c3BhbiBjbGFzcz1cIm9iXCI+fDwvc3Bhbj48aT5WPC9pPjxzdWI+MTwvc3ViPjxpPlY8L2k+PHN1Yj4yPC9zdWI+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj44PC9zcGFuPjwvc3Bhbj48L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+ZXNwYWNpbyBtdWVzdHJhbCByZWR1Y2lkbzwvc3Bhbj48L2Rpdj48L2Rpdj4iLCAiZTQiOiAiPGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YSkgVW5pw7NuIGUgaW50ZXJzZWNjacOzbjwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+QTwvaT48c3BhbiBjbGFzcz1cIm9iXCI+4oiqPC9zcGFuPjxpPkI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj48aT5QPC9pPig8c3BhbiBjbGFzcz1cImF0XCI+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqjwvc3Bhbj48aT5CPC9pPik8c3VwPmM8L3N1cD48L3NwYW4+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj4wLDM8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNzwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5jb21wbGVtZW50bzwvc3Bhbj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPig8aT5BPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7iiKk8L3NwYW4+PGk+QjwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48aT5QPC9pPig8aT5BPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjxpPlA8L2k+KDxpPkI8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj48aT5QPC9pPig8aT5BPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7iiKo8L3NwYW4+PGk+QjwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDU8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjAsNDx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj4wLDc8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5yZWdsYSBkZSBsYSBzdW1hPC9zcGFuPjwvZGl2PjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmIpIE9jdXJyZSBBIHkgbm8gb2N1cnJlIEI8L2g1PjxwPkVuIGVsIGRpYWdyYW1hIGRlIFZlbm4sIGVzIGxhIHpvbmEgZGUgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPkE8L2k+PC9zcGFuPiBxdWUgcXVlZGEgYWZ1ZXJhIGRlIDxzcGFuIGNsYXNzPVwibWlcIj48aT5CPC9pPjwvc3Bhbj4uIEEgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPkE8L2k+PC9zcGFuPiBjb21wbGV0byBsZSBzYWNhbW9zIGxhIGludGVyc2VjY2nDs24uPC9wPjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48c3BhbiBjbGFzcz1cImF0XCI+PGk+QjwvaT48c3VwPmM8L3N1cD48L3NwYW4+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PGk+UDwvaT4oPGk+QTwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjxpPlA8L2k+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5CPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj4wLDI8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMzwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5QKEEgeSBubyBCKSA9IFAoQSkg4oiSIFAoQSDiiKkgQik8L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YykgSW5kZXBlbmRlbmNpYSB5IGV4Y2x1c2nDs248L2g1PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KDxpPkE8L2k+KTxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj48aT5QPC9pPig8aT5CPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNTxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj4wLDQ8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PGk+UDwvaT4oPGk+QTwvaT48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkI8L2k+KTwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5pbmRlcGVuZGllbnRlczogUChB4oipQikgPSBQKEEpwrdQKEIpPC9zcGFuPjwvZGl2PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KDxpPkE8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5CPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPuKJoDwvc3Bhbj4wPC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPmV4Y2x1eWVudGVzOiBQKEHiiKlCKSA9IDA8L3NwYW4+PC9kaXY+PHA+U29uIDxiPmluZGVwZW5kaWVudGVzPC9iPiB5IDxiPm5vIHNvbiBleGNsdXllbnRlczwvYj4uPC9wPjwvZGl2PiIsICJlNSI6ICI8ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5FbCDDoXJib2w8L2g1PjxwPlByaW1lciBuaXZlbDogbGEgZW52YXNhZG9yYS4gPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkU8L2k+PHN1Yj4xPC9zdWI+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCw1PC9zcGFuPiwgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkU8L2k+PHN1Yj4yPC9zdWI+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwzPC9zcGFuPiB5IDxzcGFuIGNsYXNzPVwibWlcIj48aT5QPC9pPig8aT5FPC9pPjxzdWI+Mzwvc3ViPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjE8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj7iiJI8L3NwYW4+MCw1PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+4oiSPC9zcGFuPjAsMzx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwyPC9zcGFuPi4gU2VndW5kbyBuaXZlbDogZGVmZWN0dW9zbyBzZWfDum4gbGEgZW52YXNhZG9yYSwgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkQ8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RTwvaT48c3ViPjE8L3N1Yj4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDAyPC9zcGFuPiwgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkQ8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RTwvaT48c3ViPjI8L3N1Yj4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDAzPC9zcGFuPiwgPHNwYW4gY2xhc3M9XCJtaVwiPjxpPlA8L2k+KDxpPkQ8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RTwvaT48c3ViPjM8L3N1Yj4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDA2PC9zcGFuPi48L3A+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YSkgRGVmZWN0dW9zbzwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+RDwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDU8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCwwMjx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPis8L3NwYW4+MCwzPHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjAsMDM8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjAsMjxzcGFuIGNsYXNzPVwib2JcIj7Ctzwvc3Bhbj4wLDA2PC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPnByb2JhYmlsaWRhZCB0b3RhbDwvc3Bhbj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPig8aT5EPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMDE8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj4rPC9zcGFuPjAsMDA5PHdicj48c3BhbiBjbGFzcz1cIm9iXCI+Kzwvc3Bhbj4wLDAxMjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwwMzE8L2Rpdj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5iKSBObyBkZWZlY3R1b3NvPC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPig8c3BhbiBjbGFzcz1cImF0XCI+PGk+RDwvaT48c3VwPmM8L3N1cD48L3NwYW4+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MTx3YnI+PHNwYW4gY2xhc3M9XCJvYlwiPuKIkjwvc3Bhbj4wLDAzMTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCw5Njk8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+Y29tcGxlbWVudG88L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YykgRW52YXNhZG9yYSAyIHkgZGVmZWN0dW9zbzwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+RTwvaT48c3ViPjI8L3N1Yj48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PGk+UDwvaT4oPGk+RTwvaT48c3ViPjI8L3N1Yj4pPHNwYW4gY2xhc3M9XCJvYlwiPsK3PC9zcGFuPjxpPlA8L2k+KDxpPkQ8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RTwvaT48c3ViPjI8L3N1Yj4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDM8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCwwMzx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwwMDk8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+cmVnbGEgZGVsIHByb2R1Y3RvPC9zcGFuPjwvZGl2PjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmQpIEFsIG1lbm9zIHVubyBkZSBkb3MgZnJhc2NvczwvaDU+PHA+TG8gY29udHJhcmlvIGVzIHF1ZSBuaW5ndW5vIHNlYSBkZWZlY3R1b3NvLiBDb21vIHVubyBubyBjYW1iaWEgbGFzIHByb2JhYmlsaWRhZGVzIGRlbCBvdHJvLCBzZSBtdWx0aXBsaWNhLjwvcD48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPihuaW5ndW5vIDxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCw5Njk8c3BhbiBjbGFzcz1cIm9iXCI+wrc8L3NwYW4+MCw5Njk8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsOTM4OTYxPC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPmluZGVwZW5kaWVudGVzOiBzZSBtdWx0aXBsaWNhPC9zcGFuPjwvZGl2PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KGFsIG1lbm9zIHVubyA8aT5EPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjE8d2JyPjxzcGFuIGNsYXNzPVwib2JcIj7iiJI8L3NwYW4+MCw5Mzg5NjE8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj7iiYg8L3NwYW4+MCwwNjE8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+Y29tcGxlbWVudG88L3NwYW4+PC9kaXY+PC9kaXY+IiwgImU2IjogIjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PkxvcyBkYXRvcyBlbiB1bmEgdGFibGE8L2g1PjxwPkRlIDIwMCBhbHVtbm9zOiAxMjAgcHJhY3RpY2FuIGRlcG9ydGUgKDQ4IHRvY2FuIHVuIGluc3RydW1lbnRvKSB5IDgwIG5vIHByYWN0aWNhbiAoMTIgdG9jYW4pLiBFbiB0b3RhbCB0b2NhbiB1biBpbnN0cnVtZW50byA0OCArIDEyID0gNjAuPC9wPjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmEpIFRvY2EgdW4gaW5zdHJ1bWVudG88L2g1PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KDxpPkk8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj42MDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MjAwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMzwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5jYXNvcyBmYXZvcmFibGVzIHNvYnJlIGNhc29zIHBvc2libGVzPC9zcGFuPjwvZGl2PjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmIpIFRvY2EsIHNhYmllbmRvIHF1ZSBwcmFjdGljYSBkZXBvcnRlPC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj7iiKk8L3NwYW4+PGk+RDwvaT4pPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj48aT5QPC9pPig8aT5EPC9pPik8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjQ4PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4yMDA8L3NwYW4+PC9zcGFuPjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xMjA8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjIwMDwvc3Bhbj48L3NwYW4+PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NDg8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjEyMDwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDQ8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+cHJvYmFiaWxpZGFkIGNvbmRpY2lvbmFsPC9zcGFuPjwvZGl2PjxwPkVsIDIwMCBzZSBzaW1wbGlmaWNhOiBlbCBudWV2byBlc3BhY2lvIG11ZXN0cmFsIHNvbiBsb3MgPGI+MTIwPC9iPiBhbHVtbm9zIHF1ZSBwcmFjdGljYW4gZGVwb3J0ZS48L3A+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+YykgTm8gcHJhY3RpY2EsIHNhYmllbmRvIHF1ZSB0b2NhPC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPig8c3BhbiBjbGFzcz1cImF0XCI+PGk+RDwvaT48c3VwPmM8L3N1cD48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+STwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjxpPlA8L2k+KDxzcGFuIGNsYXNzPVwiYXRcIj48aT5EPC9pPjxzdXA+Yzwvc3VwPjwvc3Bhbj48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkk8L2k+KTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PGk+UDwvaT4oPGk+STwvaT4pPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xMjwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MjAwPC9zcGFuPjwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+NjA8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjIwMDwvc3Bhbj48L3NwYW4+PC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTI8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjYwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMjwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5wcm9iYWJpbGlkYWQgY29uZGljaW9uYWw8L3NwYW4+PC9kaXY+PC9kaXY+PGRpdiBjbGFzcz1cInJzLXBhc29cIj48aDU+ZCkgwr9JbmRlcGVuZGllbnRlcz88L2g1PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KDxpPkk8L2k+PHNwYW4gY2xhc3M9XCJvYlwiPnw8L3NwYW4+PGk+RDwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDQ8c3BhbiBjbGFzcz1cImdhcFwiPjwvc3Bhbj48aT5QPC9pPig8aT5JPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsMzwvZGl2PjxzcGFuIGNsYXNzPVwicmdcIj5pbmRlcGVuZGllbnRlcyBzaSBQKEkgfCBEKSA9IFAoSSk8L3NwYW4+PC9kaXY+PHA+Q29tbyBzb24gZGlzdGludGFzLCA8Yj5ubyBzb24gaW5kZXBlbmRpZW50ZXM8L2I+OiBzYWJlciBxdWUgcHJhY3RpY2EgZGVwb3J0ZSBhdW1lbnRhIGxhIHByb2JhYmlsaWRhZCBkZSBxdWUgdG9xdWUgdW4gaW5zdHJ1bWVudG8uPC9wPjwvZGl2PiIsICJlNyI6ICI8ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5Mb3MgZGF0b3MgZW4gdW5hIHRhYmxhPC9oNT48cD5EZSAzMDAgYWx1bW5vczogMTgwIHByYWN0aWNhbiBkZXBvcnRlICg1NCB0b2NhbiB1biBpbnN0cnVtZW50bykgeSAxMjAgbm8gcHJhY3RpY2FuICg5NiB0b2NhbikuIEVuIHRvdGFsIHRvY2FuIHVuIGluc3RydW1lbnRvIDU0ICsgOTYgPSAxNTAuPC9wPjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmEpIFRvY2EgdW4gaW5zdHJ1bWVudG88L2g1PjxkaXYgY2xhc3M9XCJycy1saW5lXCI+PGRpdiBjbGFzcz1cImNhbGMgcnMtY2FsY1wiPjxpPlA8L2k+KDxpPkk8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj4xNTA8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjMwMDwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDU8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+Y2Fzb3MgZmF2b3JhYmxlcyBzb2JyZSBjYXNvcyBwb3NpYmxlczwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPVwicnMtcGFzb1wiPjxoNT5iKSBUb2NhLCBzYWJpZW5kbyBxdWUgcHJhY3RpY2EgZGVwb3J0ZTwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPGk+STwvaT48c3BhbiBjbGFzcz1cIm9iXCI+fDwvc3Bhbj48aT5EPC9pPik8d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+PGk+UDwvaT4oPGk+STwvaT48c3BhbiBjbGFzcz1cIm9iXCI+4oipPC9zcGFuPjxpPkQ8L2k+KTwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+PGk+UDwvaT4oPGk+RDwvaT4pPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj41NDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MzAwPC9zcGFuPjwvc3Bhbj48L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+MTgwPC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4zMDA8L3NwYW4+PC9zcGFuPjwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjU0PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj4xODA8L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwzPC9kaXY+PHNwYW4gY2xhc3M9XCJyZ1wiPnByb2JhYmlsaWRhZCBjb25kaWNpb25hbDwvc3Bhbj48L2Rpdj48cD5FbCAzMDAgc2Ugc2ltcGxpZmljYTogZWwgbnVldm8gZXNwYWNpbyBtdWVzdHJhbCBzb24gbG9zIDxiPjE4MDwvYj4gYWx1bW5vcyBxdWUgcHJhY3RpY2FuIGRlcG9ydGUuPC9wPjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmMpIE5vIHByYWN0aWNhLCBzYWJpZW5kbyBxdWUgdG9jYTwvaDU+PGRpdiBjbGFzcz1cInJzLWxpbmVcIj48ZGl2IGNsYXNzPVwiY2FsYyBycy1jYWxjXCI+PGk+UDwvaT4oPHNwYW4gY2xhc3M9XCJhdFwiPjxpPkQ8L2k+PHN1cD5jPC9zdXA+PC9zcGFuPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkk8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj48aT5QPC9pPig8c3BhbiBjbGFzcz1cImF0XCI+PGk+RDwvaT48c3VwPmM8L3N1cD48L3NwYW4+PHNwYW4gY2xhc3M9XCJvYlwiPuKIqTwvc3Bhbj48aT5JPC9pPik8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjxpPlA8L2k+KDxpPkk8L2k+KTwvc3Bhbj48L3NwYW4+PHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjxzcGFuIGNsYXNzPVwiZnJcIj48c3BhbiBjbGFzcz1cImZuXCI+OTY8L3NwYW4+PHNwYW4gY2xhc3M9XCJmZFwiPjMwMDwvc3Bhbj48L3NwYW4+PC9zcGFuPjxzcGFuIGNsYXNzPVwiZmRcIj48c3BhbiBjbGFzcz1cImZyXCI+PHNwYW4gY2xhc3M9XCJmblwiPjE1MDwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MzAwPC9zcGFuPjwvc3Bhbj48L3NwYW4+PC9zcGFuPjx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+PHNwYW4gY2xhc3M9XCJmclwiPjxzcGFuIGNsYXNzPVwiZm5cIj45Njwvc3Bhbj48c3BhbiBjbGFzcz1cImZkXCI+MTUwPC9zcGFuPjwvc3Bhbj48d2JyPjxzcGFuIGNsYXNzPVwib3NcIj49PC9zcGFuPjAsNjQ8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+cHJvYmFiaWxpZGFkIGNvbmRpY2lvbmFsPC9zcGFuPjwvZGl2PjwvZGl2PjxkaXYgY2xhc3M9XCJycy1wYXNvXCI+PGg1PmQpIMK/SW5kZXBlbmRpZW50ZXM/PC9oNT48ZGl2IGNsYXNzPVwicnMtbGluZVwiPjxkaXYgY2xhc3M9XCJjYWxjIHJzLWNhbGNcIj48aT5QPC9pPig8aT5JPC9pPjxzcGFuIGNsYXNzPVwib2JcIj58PC9zcGFuPjxpPkQ8L2k+KTx3YnI+PHNwYW4gY2xhc3M9XCJvc1wiPj08L3NwYW4+MCwzPHNwYW4gY2xhc3M9XCJnYXBcIj48L3NwYW4+PGk+UDwvaT4oPGk+STwvaT4pPHdicj48c3BhbiBjbGFzcz1cIm9zXCI+PTwvc3Bhbj4wLDU8L2Rpdj48c3BhbiBjbGFzcz1cInJnXCI+aW5kZXBlbmRpZW50ZXMgc2kgUChJIHwgRCkgPSBQKEkpPC9zcGFuPjwvZGl2PjxwPkNvbW8gc29uIGRpc3RpbnRhcywgPGI+bm8gc29uIGluZGVwZW5kaWVudGVzPC9iPjogc2FiZXIgcXVlIHByYWN0aWNhIGRlcG9ydGUgZGlzbWludXllIGxhIHByb2JhYmlsaWRhZCBkZSBxdWUgdG9xdWUgdW4gaW5zdHJ1bWVudG8uPC9wPjwvZGl2PiJ9</script>
+<script>
+(function(){
+  'use strict';
+  function dec64(id){ var r = document.getElementById(id).textContent.trim(); return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(r), function(c){ return c.charCodeAt(0); }))); }
+  var A = dec64('ans');
+  var PTS = [{"id": "e1", "ex": "e1", "b": "ed", "tit": "E1", "max": 2, "q": "¿Cuál es la solución particular en forma explícita?"}, {"id": "e2a", "ex": "e2", "b": "ed", "tit": "E2 a)", "max": 0.5, "q": "a) Valor de la constante de integración."}, {"id": "e2b", "ex": "e2", "b": "ed", "tit": "E2 b)", "max": 0.5, "q": "b) Valor de K, con cuatro decimales."}, {"id": "e2c", "ex": "e2", "b": "ed", "tit": "E2 c)", "max": 0.5, "q": "c) Temperatura a los 8 minutos, en °C."}, {"id": "e2d", "ex": "e2", "b": "ed", "tit": "E2 d)", "max": 0.5, "q": "d) Instante en que llega a 25 °C, en minutos."}, {"id": "e3a", "ex": "e3", "b": "pr", "tit": "E3 a)", "max": 0.5, "q": "a) Las tres son rojas."}, {"id": "e3b", "ex": "e3", "b": "pr", "tit": "E3 b)", "max": 0.5, "q": "b) Al menos una es verde."}, {"id": "e3c", "ex": "e3", "b": "pr", "tit": "E3 c)", "max": 0.5, "q": "c) Exactamente dos son rojas."}, {"id": "e3d", "ex": "e3", "b": "pr", "tit": "E3 d)", "max": 0.5, "q": "d) La tercera es roja, sabiendo que las dos primeras fueron verdes."}, {"id": "e4a", "ex": "e4", "b": "pr", "tit": "E4 a)", "max": 0.8, "q": "a) Unión e intersección."}, {"id": "e4b", "ex": "e4", "b": "pr", "tit": "E4 b)", "max": 0.6, "q": "b) Ocurre A y no ocurre B."}, {"id": "e4c", "ex": "e4", "b": "pr", "tit": "E4 c)", "max": 0.6, "q": "c) ¿Qué se puede afirmar de A y B?"}, {"id": "e5a", "ex": "e5", "b": "pr", "tit": "E5 a)", "max": 0.5, "q": "a) Es defectuoso."}, {"id": "e5b", "ex": "e5", "b": "pr", "tit": "E5 b)", "max": 0.5, "q": "b) No es defectuoso."}, {"id": "e5c", "ex": "e5", "b": "pr", "tit": "E5 c)", "max": 0.5, "q": "c) Proviene de la envasadora 2 y es defectuoso."}, {"id": "e5d", "ex": "e5", "b": "pr", "tit": "E5 d)", "max": 0.5, "q": "d) Al menos uno de los dos frascos es defectuoso."}, {"id": "e6a", "ex": "e6", "b": "co", "tit": "E6 a)", "max": 0, "q": "a) Toca un instrumento."}, {"id": "e6b", "ex": "e6", "b": "co", "tit": "E6 b)", "max": 0, "q": "b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral."}, {"id": "e6c", "ex": "e6", "b": "co", "tit": "E6 c)", "max": 0, "q": "c) No practica deporte, sabiendo que toca un instrumento."}, {"id": "e6d", "ex": "e6", "b": "co", "tit": "E6 d)", "max": 0, "q": "d) ¿«Practica deporte» y «toca un instrumento» son independientes?"}, {"id": "e7a", "ex": "e7", "b": "co", "tit": "E7 a)", "max": 0, "q": "a) Toca un instrumento."}, {"id": "e7b", "ex": "e7", "b": "co", "tit": "E7 b)", "max": 0, "q": "b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral."}, {"id": "e7c", "ex": "e7", "b": "co", "tit": "E7 c)", "max": 0, "q": "c) No practica deporte, sabiendo que toca un instrumento."}, {"id": "e7d", "ex": "e7", "b": "co", "tit": "E7 d)", "max": 0, "q": "d) ¿«Practica deporte» y «toca un instrumento» son independientes?"}];
+  var EXS = [{"id": "e1", "n": 1, "b": "ed", "nh": 3}, {"id": "e2", "n": 2, "b": "ed", "nh": 4}, {"id": "e3", "n": 3, "b": "pr", "nh": 4}, {"id": "e4", "n": 4, "b": "pr", "nh": 4}, {"id": "e5", "n": 5, "b": "pr", "nh": 4}, {"id": "e6", "n": 6, "b": "co", "nh": 4}, {"id": "e7", "n": 7, "b": "co", "nh": 4}];
+  var BLQ = {"ed": "Ecuaciones diferenciales", "pr": "Probabilidad", "co": "Condicional"};
+  var BIDS = Object.keys(BLQ);
+  var SHEET = 'https://script.google.com/macros/s/AKfycbwn6pNTFS8vQotr3_JPfJ6LUUpX2zxJPqSosYW_qrCKoc4eUT4_4j1-cGwZKuXo2fsL/exec';
+  var MAXT = {nums:3, choice:2};
+  var MULT = [1, 0.6, 0.3];
+  var SKEY = 'phpp-edprob-estado-v1', DBN = 'phpp-edprob-fotos';
+
+  function $(s, r){ return (r||document).querySelector(s); }
+  function $$(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+  function item(id){ return PTS.filter(function(p){ return p.id === id; })[0]; }
+  function exOf(id){ return EXS.filter(function(x){ return x.id === id; })[0]; }
+
+  /* ---------- estado ---------- */
+  var ST = {nombre:'', curso:'', inicio:null, ult:null, ej:{}, pistas:{}, gates:{}};
+  try { var o = JSON.parse(localStorage.getItem(SKEY) || 'null'); if (o && o.ej) { for (var k in o) ST[k] = o[k]; } } catch(e){}
+  function save(){ try { localStorage.setItem(SKEY, JSON.stringify(ST)); } catch(e){} }
+
+  var alumnoIn = $('#alumno'), cursoSel = $('#curso-sel');
+  alumnoIn.value = ST.nombre || ''; cursoSel.value = ST.curso || '';
+  alumnoIn.addEventListener('input', function(){ ST.nombre = alumnoIn.value; save(); renderCheck(); });
+  alumnoIn.addEventListener('change', identListo);
+  cursoSel.addEventListener('change', function(){ ST.curso = cursoSel.value; save(); identListo(); renderCheck(); });
+
+  /* ---------- planilla ---------- */
+  function send(ej, bloque, res, intentos, pistas){
+    if (!SHEET) return;
+    try {
+      fetch(SHEET, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({curso: ST.curso, alumno: (ST.nombre||'').trim(), bloque: bloque, ej: ej, res: res, intentos: intentos, pistas: pistas})}).catch(function(){});
+    } catch(e){}
+  }
+
+  /* ---------- identificación ---------- */
+  var volverA = null;
+  function falta(){ if (!(ST.nombre||'').trim()) return 'nombre'; if (!ST.curso) return 'curso'; return null; }
+  function avisoTxt(f){ return f === 'nombre' ? 'Escribí tu apellido y nombre para poder verificar.' : 'Elegí tu curso para poder verificar.'; }
+  function needIdent(id){
+    var f = falta(); if (!f) return false;
+    volverA = id;
+    var av = $('#ident-aviso'); av.textContent = avisoTxt(f); av.hidden = false;
+    $('#ident-id').classList.add('falta');
+    if (id) setFb(id, 'stop', (f === 'nombre' ? 'Falta tu apellido y nombre.' : 'Falta elegir el curso.') + ' Completalo arriba y la página vuelve a este ejercicio.');
+    $('#ident-id').scrollIntoView({block:'center', behavior:'smooth'});
+    var t = f === 'nombre' ? alumnoIn : cursoSel;
+    try { t.focus({preventScroll:true}); } catch(e){ t.focus(); }
+    return true;
+  }
+  function identListo(){
+    var f = falta(), av = $('#ident-aviso');
+    if (f){ if (!av.hidden) av.textContent = avisoTxt(f); return; }
+    av.hidden = true; $('#ident-id').classList.remove('falta');
+    if (volverA){
+      var v = volverA; volverA = null;
+      var el = document.getElementById('ej-' + v) || document.getElementById('ex-' + v);
+      if (document.getElementById('ej-' + v)) setFb(v, 'ok', 'Listo: ' + esc((ST.nombre||'').trim()) + ', ' + ST.curso + '. Ya podés verificar.');
+      setTimeout(function(){ el.scrollIntoView({block:'center', behavior:'smooth'}); }, 150);
+    }
+  }
+
+  /* ---------- reloj ---------- */
+  function hhmm(ms){ var d = new Date(ms); return d.toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit', hour12:false}); }
+  function mins(a, b){ return Math.max(0, Math.round((b - a) / 60000)); }
+  function renderReloj(){
+    if (!ST.inicio) return;
+    $('#reloj').innerHTML = 'Empezaste a las <b>' + hhmm(ST.inicio) + '</b> · llevás <b>' + mins(ST.inicio, Date.now()) + ' min</b>. En el parcial vas a tener dos módulos.';
+  }
+  setInterval(renderReloj, 30000);
+  function marcarInicio(){ if (!ST.inicio) ST.inicio = Date.now(); ST.ult = Date.now(); }
+
+  /* ---------- números ---------- */
+  function parseNum(s){
+    s = (s||'').trim().replace(/−/g, '-').replace(/\s+/g, '').replace(',', '.');
+    if (!s) return NaN;
+    var m = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+    if (m) return parseFloat(m[1]) / parseFloat(m[2]);
+    if (!/^-?\d*\.?\d+$/.test(s)) return NaN;
+    return parseFloat(s);
+  }
+
+  /* ---------- verificación ---------- */
+  function setFb(id, cls, html){ var fb = $('[data-fb="'+id+'"]'); fb.className = 'fb ' + cls; fb.innerHTML = html; }
+  function cerrar(id, ok){
+    var c = document.getElementById('ej-' + id);
+    $$('input', c).forEach(function(el){ el.disabled = true; });
+    $('[data-check="'+id+'"]').disabled = true;
+    $('[data-tries="'+id+'"]').textContent = '';
+    if (ok) c.classList.add('done');
+  }
+  function leer(id){
+    var a = A[id], c = document.getElementById('ej-' + id);
+    if (a.type === 'choice'){ var r = $('input[name="'+id+'"]:checked', c); return r ? r.value : null; }
+    var vals = a.ok.map(function(_, n){ return $('[data-num="'+id+'-'+n+'"]', c).value; });
+    return vals.some(function(v){ return !v.trim(); }) ? null : vals;
+  }
+  function check(id){
+    if (needIdent(id)) return;
+    var a = A[id], p = item(id), ans = leer(id), ok = false, specific = '';
+    if (ans === null){ setFb(id, 'stop', 'Completá la respuesta antes de verificar.'); return; }
+    if (a.type === 'choice'){ ok = ans === a.ok; if (!ok) specific = a.fb[ans] || ''; }
+    else {
+      var nums = ans.map(parseNum);
+      if (nums.some(isNaN)){ setFb(id, 'stop', 'No reconozco ese número. Escribí un decimal con coma (0,25) o una fracción con barra (1/4).'); return; }
+      var bad = nums.filter(function(v, n){ return !a.ok[n].v.some(function(x){ return Math.abs(v - x) <= a.ok[n].tol; }); }).length;
+      ok = bad === 0;
+      if (!ok && a.ok.length > 1) specific = bad === 1 ? 'Uno de los dos valores no es correcto.' : 'Ninguno de los dos valores es correcto.';
+    }
+    marcarInicio();
+    var e = ST.ej[id] || (ST.ej[id] = {res:null, att:0});
+    e.ans = ans;
+    if (ok){
+      e.res = 'ok'; e.att += 1; save();
+      setFb(id, 'ok', a.fbok); cerrar(id, true);
+      send(p.tit, p.b, 'Correcto', e.att - 1, ST.pistas[p.ex] || 0);
+    } else {
+      e.att += 1;
+      var left = (MAXT[a.type] || 3) - e.att;
+      if (left <= 0){
+        e.res = 'fail'; save();
+        setFb(id, 'stop', (specific ? specific + '<br>' : '') + 'Se terminaron los intentos de este ítem. Seguí con el siguiente; al final, en el informe, vas a tener la resolución para comparar.');
+        cerrar(id, false);
+        send(p.tit, p.b, 'Sin intentos', e.att, ST.pistas[p.ex] || 0);
+      } else {
+        save();
+        setFb(id, 'no', specific || 'Todavía no. Revisá el desarrollo o pedí una pista.');
+        $('[data-tries="'+id+'"]').textContent = left === 1 ? 'Queda 1 intento' : 'Quedan ' + left + ' intentos';
+        send(p.tit, p.b, 'Incorrecto', e.att, ST.pistas[p.ex] || 0);
+      }
+    }
+    renderReloj(); renderPts(); renderCheck();
+  }
+
+  /* ---------- pistas y compuertas ---------- */
+  function mostrarPistas(exId){
+    var n = ST.pistas[exId] || 0, hs = $$('[data-hint^="'+exId+'-"]');
+    hs.forEach(function(h, i){ h.hidden = i >= n; });
+    var b = $('[data-more="'+exId+'"]');
+    if (n >= hs.length){ b.disabled = true; b.textContent = 'No hay más pistas'; }
+    else if (n > 0) b.textContent = 'Pedir otra pista';
+  }
+  function pista(exId){
+    if (needIdent(exId)) return;
+    var x = exOf(exId);
+    if ((ST.pistas[exId] || 0) >= x.nh) return;
+    ST.pistas[exId] = (ST.pistas[exId] || 0) + 1;
+    marcarInicio(); save(); mostrarPistas(exId); renderReloj();
+    send('E' + x.n, x.b, 'Pidió pista', 0, ST.pistas[exId]);
+  }
+  function gate(exId, on){
+    ST.gates[exId] = on; save();
+    $('[data-body="'+exId+'"]').classList.toggle('locked', !on);
+  }
+
+  /* ---------- restaurar ---------- */
+  function restaurar(){
+    EXS.forEach(function(x){
+      mostrarPistas(x.id);
+      var g = $('[data-gate="'+x.id+'"]'); g.checked = !!ST.gates[x.id];
+      $('[data-body="'+x.id+'"]').classList.toggle('locked', !g.checked);
+    });
+    PTS.forEach(function(p){
+      var e = ST.ej[p.id]; if (!e) return;
+      var a = A[p.id], c = document.getElementById('ej-' + p.id);
+      if (e.ans != null){
+        if (a.type === 'choice'){ var r = $('input[name="'+p.id+'"][value="'+e.ans+'"]', c); if (r) r.checked = true; }
+        else e.ans.forEach(function(v, n){ var el = $('[data-num="'+p.id+'-'+n+'"]', c); if (el) el.value = v; });
+      }
+      if (e.res === 'ok'){ setFb(p.id, 'ok', a.fbok); cerrar(p.id, true); }
+      else if (e.res === 'fail'){ setFb(p.id, 'stop', 'Se terminaron los intentos de este ítem.'); cerrar(p.id, false); }
+      else if (e.att){ var left = (MAXT[a.type]||3) - e.att; $('[data-tries="'+p.id+'"]').textContent = left === 1 ? 'Queda 1 intento' : 'Quedan ' + left + ' intentos'; }
+    });
+    renderReloj();
+  }
+
+  /* ---------- puntaje ---------- */
+  function fmt1(v){ v = Math.round(v * 100) / 100; return String(v).replace('.', ','); }
+  function ptsDe(p){ var e = ST.ej[p.id]; return (e && e.res === 'ok') ? p.max * (MULT[e.att - 1] || 0) : 0; }
+  function estado(e){
+    if (!e || (!e.res && !e.att)) return 'Sin verificar';
+    if (e.res === 'ok') return 'Correcto (' + (e.att === 1 ? '1.er' : e.att === 2 ? '2.º' : '3.er') + ' intento)';
+    if (e.res === 'fail') return 'No resuelto';
+    return 'En curso (' + e.att + (e.att === 1 ? ' intento fallido)' : ' intentos fallidos)');
+  }
+  function maxB(b){ return PTS.filter(function(p){ return p.b === b; }).reduce(function(s, p){ return s + p.max; }, 0); }
+  function puntaje(){
+    var sub = {}, total = 0;
+    PTS.forEach(function(p){ var v = ptsDe(p); sub[p.b] = (sub[p.b] || 0) + v; total += v; });
+    return {sub:sub, total:total};
+  }
+  function filas(){
+    var r = puntaje(), out = [];
+    BIDS.forEach(function(b){
+      EXS.filter(function(x){ return x.b === b; }).forEach(function(x){
+        var np = ST.pistas[x.id] || 0;
+        out.push({k:'exh', t:'Ejercicio ' + x.n + (np ? ' · ' + np + (np === 1 ? ' pista' : ' pistas') : '')});
+        PTS.filter(function(p){ return p.ex === x.id; }).forEach(function(p){
+          out.push({k:'it', t:p.tit, q:p.q, est:estado(ST.ej[p.id]), pts: p.max ? fmt1(ptsDe(p)) + ' de ' + fmt1(p.max) : 'adicional'});
+        });
+      });
+      var mb = maxB(b);
+      out.push({k:'sub', t:'Subtotal · ' + BLQ[b], pts: mb ? fmt1(r.sub[b] || 0) + ' de ' + fmt1(mb) : 'adicional'});
+    });
+    out.push({k:'tot', t:'Total', pts: fmt1(r.total) + ' de 10'});
+    return out;
+  }
+  function renderPts(){
+    $('#pts-body').innerHTML = filas().map(function(f){
+      if (f.k === 'exh') return '<tr class="exh"><td colspan="3">' + f.t + '</td></tr>';
+      if (f.k === 'it') return '<tr><td>' + f.t + '</td><td>' + f.est + '</td><td' + (f.pts === 'adicional' ? ' class="ns"' : '') + '>' + f.pts + '</td></tr>';
+      return '<tr class="' + f.k + '"><td colspan="2">' + f.t + '</td><td>' + f.pts + '</td></tr>';
+    }).join('');
+    $('#pts-total').textContent = fmt1(puntaje().total) + ' de 10';
+  }
+
+  /* ---------- fotos ---------- */
+  var FOT = {}; BIDS.forEach(function(b){ FOT[b] = []; });
+  var DB = null;
+  function dbOpen(){ return new Promise(function(res){ try { var rq = indexedDB.open(DBN, 1); rq.onupgradeneeded = function(){ rq.result.createObjectStore('f'); }; rq.onsuccess = function(){ DB = rq.result; res(); }; rq.onerror = function(){ res(); }; } catch(e){ res(); } }); }
+  function dbPut(b){ if (!DB) return; try { DB.transaction('f', 'readwrite').objectStore('f').put(FOT[b], b); } catch(e){} }
+  function dbLoad(){
+    return new Promise(function(res){
+      if (!DB) return res();
+      try {
+        var os = DB.transaction('f').objectStore('f'), n = 0;
+        BIDS.forEach(function(b){ var rq = os.get(b); rq.onsuccess = function(){ if (Array.isArray(rq.result)) FOT[b] = rq.result; if (++n === BIDS.length) res(); }; rq.onerror = function(){ if (++n === BIDS.length) res(); }; });
+      } catch(e){ res(); }
+    });
+  }
+  function comprimir(file){
+    return new Promise(function(res, rej){
+      var fr = new FileReader();
+      fr.onload = function(){
+        var img = new Image();
+        img.onload = function(){
+          var w = img.naturalWidth, h = img.naturalHeight;
+          if (Math.max(w, h) < 200) return rej('chica');
+          var k = Math.min(1, 1400 / Math.max(w, h));
+          var cv = document.createElement('canvas'); cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+          var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(img, 0, 0, cv.width, cv.height);
+          res({d: cv.toDataURL('image/jpeg', 0.72), w: cv.width, h: cv.height});
+        };
+        img.onerror = function(){ rej('formato'); };
+        img.src = fr.result;
+      };
+      fr.onerror = function(){ rej('formato'); };
+      fr.readAsDataURL(file);
+    });
+  }
+  function renderFotos(b){
+    var box = $('[data-thumbs="'+b+'"]');
+    if (!FOT[b].length){ box.innerHTML = '<span class="fvacia">Todavía no hay fotos de este bloque.</span>'; return; }
+    box.innerHTML = FOT[b].map(function(f, i){ return '<div class="thumb"><img alt="Foto ' + (i + 1) + ' · ' + BLQ[b] + '" src="' + f.d + '"><button type="button" data-fquitar="' + b + ':' + i + '">Quitar</button></div>'; }).join('');
+  }
+  function msg(html, cls){ var fb = $('#fb-pdf'); fb.className = 'fb ' + cls; fb.innerHTML = html; }
+  document.addEventListener('change', function(ev){
+    var inp = ev.target.closest('[data-foto]'); if (!inp) return;
+    var b = inp.getAttribute('data-foto'), files = Array.prototype.slice.call(inp.files || []);
+    inp.value = '';
+    files.reduce(function(ch, f){ return ch.then(function(){
+      if (FOT[b].length >= 4){ msg('Ya hay 4 fotos de ' + BLQ[b] + '. Quitá alguna para agregar otra.', 'stop'); return; }
+      return comprimir(f).then(function(o){
+        if (FOT[b].some(function(g){ return g.d === o.d; })){ msg('Esa imagen ya está cargada en ' + BLQ[b] + '. Elegí otra foto.', 'stop'); return; }
+        FOT[b].push(o); dbPut(b); renderFotos(b); renderCheck(); msg('Foto agregada a ' + BLQ[b] + '.', 'ok');
+      }, function(){ msg('No se pudo leer esa imagen. Probá con otra foto (JPG o PNG).', 'stop'); });
+    }); }, Promise.resolve());
+  });
+
+  /* ---------- chequeo y PDF ---------- */
+  function tocados(){ var r = {}; PTS.forEach(function(p){ var e = ST.ej[p.id]; if (e && (e.att || e.res)) r[p.b] = true; }); return r; }
+  function faltantes(){
+    var f = [];
+    if (!(ST.nombre||'').trim()) f.push('Escribí tu apellido y nombre arriba de todo.');
+    if (!ST.curso) f.push('Elegí tu curso arriba de todo.');
+    var tc = tocados();
+    BIDS.forEach(function(b){ if (tc[b] && !FOT[b].length) f.push('Falta al menos una foto de ' + BLQ[b] + '.'); });
+    if (!Object.keys(tc).length) f.push('Todavía no verificaste ningún ítem.');
+    return f;
+  }
+  function pendientes(){ return PTS.filter(function(p){ var e = ST.ej[p.id]; return p.max && !(e && e.res); }).map(function(p){ return p.tit; }); }
+  function renderCheck(){
+    var f = faltantes(), p = pendientes(), html = f.map(function(x){ return '<span class="bad">• ' + x + '</span>'; }).join('');
+    if (!f.length) html = '<span class="good">Todo listo para descargar.</span>' + (p.length ? '<span>Ítems de los ejercicios 1 a 5 sin cerrar: ' + p.join(', ') + '.</span>' : '');
+    $('#inf-check').innerHTML = html;
+  }
+  function djb2(s){ var h = 5381; for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; return h.toString(36).toUpperCase(); }
+  function codigo(){
+    var ej = Object.keys(ST.ej).sort().map(function(k){ var e = ST.ej[k]; return k + ':' + (e.res || '-') + e.att; }).join(',');
+    var fl = BIDS.map(function(b){ return FOT[b].map(function(f){ return f.d.length; }).join('+'); }).join('|');
+    return djb2([ST.nombre, ST.curso, ST.inicio, fmt1(puntaje().total), ej, fl].join('|'));
+  }
+  function latin(s){ return String(s).replace(/−|–|—/g, '-').replace(/[‘’]/g, "'").replace(/[“”«»]/g, '"').replace(/…/g, '...').replace(/[^\x00-\xff]/g, ''); }
+  function fecha(ms){ if (!ms) return '-'; var d = new Date(ms); return d.toLocaleDateString('es-AR') + ' ' + hhmm(ms); }
+  function esc(s){ return String(s || '').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function tiempo(){ return ST.inicio && ST.ult ? mins(ST.inicio, ST.ult) + ' min (de ' + hhmm(ST.inicio) + ' a ' + hhmm(ST.ult) + ')' : '-'; }
+  function archivo(){
+    var n = (ST.nombre || 'alumno').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    return 'Informe_preparcial_ED_probabilidad_' + (n || 'alumno') + '_' + (ST.curso || '').replace(/[^A-Za-z]/g, '') + '.pdf';
+  }
+  function loadScript(src, ms){
+    return new Promise(function(res, rej){
+      var s = document.createElement('script'), done = false;
+      var to = setTimeout(function(){ if (!done){ done = true; rej('timeout'); } }, ms);
+      s.src = src; s.onload = function(){ if (!done){ done = true; clearTimeout(to); res(); } };
+      s.onerror = function(){ if (!done){ done = true; clearTimeout(to); rej('error'); } };
+      document.head.appendChild(s);
+    });
+  }
+  function armarPDF(){
+    var cod = codigo(), doc = new window.jspdf.jsPDF({unit:'mm', format:'a4'});
+    var X = 15, y = 18, W = 180;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
+    doc.text(latin('Práctica preparcial · Ecuaciones diferenciales y probabilidad'), X, y); y += 6;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+    doc.text(latin('Escuela Philips · Matemática · 5.º año · Opción 1 · Informe individual'), X, y); y += 8;
+    [['Alumno', ST.nombre], ['Curso', ST.curso], ['Tiempo de trabajo', tiempo()], ['Informe generado', fecha(Date.now())], ['Código de verificación', cod]].forEach(function(kv){
+      doc.setFont('helvetica', 'bold'); doc.text(latin(kv[0] + ':'), X, y);
+      doc.setFont('helvetica', 'normal'); doc.text(latin(kv[1]), X + 45, y); y += 5.5;
+    });
+    y += 3;
+    var cols = [X, X + 22, X + 120, X + 180];
+    function head(){ doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.text(latin('Ítem'), cols[0], y); doc.text('Consigna', cols[1], y); doc.text('Resultado', cols[2], y); doc.text('Puntos', cols[3], y, {align:'right'}); y += 1.5; doc.line(X, y, X + W, y); y += 4.5; doc.setFont('helvetica', 'normal'); }
+    head();
+    filas().forEach(function(f){
+      if (y > 278){ doc.addPage(); y = 18; head(); }
+      if (f.k === 'exh'){ doc.setFont('helvetica', 'bold'); doc.text(latin(f.t), cols[0], y); doc.setFont('helvetica', 'normal'); y += 5; return; }
+      if (f.k === 'it'){
+        var q = doc.splitTextToSize(latin(f.q), 94);
+        doc.text(latin(f.t), cols[0], y); doc.text(q, cols[1], y); doc.text(latin(f.est), cols[2], y); doc.text(latin(f.pts), cols[3], y, {align:'right'});
+        y += 4.4 * q.length + 0.8; return;
+      }
+      doc.setFont('helvetica', 'bold'); if (f.k === 'tot') doc.setFontSize(11);
+      doc.text(latin(f.t), cols[0], y); doc.text(latin(f.pts), cols[3], y, {align:'right'});
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); y += 1.5; doc.setDrawColor(200); doc.line(X, y, X + W, y); doc.setDrawColor(0); y += 5;
+    });
+    y += 2;
+    doc.text(latin('Fotos del desarrollo · ' + BIDS.map(function(b){ return BLQ[b] + ': ' + FOT[b].length; }).join(' · ')), X, y); y += 5;
+    doc.text(latin('Puntaje por ítem: 100 % en el 1.er intento, 60 % en el 2.º, 30 % en el 3.º. Las pistas no descuentan.'), X, y);
+    BIDS.forEach(function(b){
+      FOT[b].forEach(function(f, i){
+        doc.addPage();
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+        doc.text(latin(ST.nombre + ' · ' + ST.curso + ' · ' + BLQ[b] + ' · foto ' + (i + 1) + ' de ' + FOT[b].length), X, 14);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        doc.text(latin('Código de verificación: ' + cod), X, 19);
+        var mw = 180, mh = 260, k = Math.min(mw / f.w, mh / f.h);
+        doc.addImage(f.d, 'JPEG', X + (mw - f.w * k) / 2, 24, f.w * k, f.h * k);
+      });
+    });
+    return doc;
+  }
+  var RS = null;
+  function resData(){ if (!RS) RS = dec64('res'); return RS; }
+  function exCerrados(){ return EXS.filter(function(x){ return PTS.some(function(p){ var e = ST.ej[p.id]; return p.ex === x.id && e && e.res; }); }).map(function(x){ return x.id; }); }
+  function bloqueRes(exId){
+    var x = exOf(exId);
+    return '<div class="rb-h"><b>Ejercicio ' + x.n + '</b><span>' + BLQ[x.b] + '</span></div><div class="rb-enun">' + $('#ex-' + exId + ' .enun').innerHTML + '</div>' + resData()[exId];
+  }
+  function apendice(doc, ids){
+    if (!ids.length) return Promise.resolve();
+    var box = $('#res-render'), X = 15, W = 180, TOP = 24, BOT = 285, y = BOT;
+    function pageHead(){
+      doc.addPage(); y = TOP;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+      doc.text(latin('Resoluciones paso a paso · ' + ST.nombre + ' · ' + ST.curso), X, 14);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+      doc.text(latin('Comparalas con tu desarrollo en papel.'), X, 19);
+    }
+    var ch = Promise.resolve();
+    ids.forEach(function(id){
+      ch = ch.then(function(){
+        box.innerHTML = bloqueRes(id);
+        return window.html2canvas(box, {scale:2, backgroundColor:'#ffffff', logging:false}).then(function(cv){
+          var mm = W / cv.width, hmm = cv.height * mm;
+          if (hmm <= BOT - TOP){ if (y + hmm > BOT) pageHead(); doc.addImage(cv.toDataURL('image/jpeg', 0.85), 'JPEG', X, y, W, hmm); y += hmm + 4; return; }
+          var sliceH = Math.floor((BOT - TOP) / mm), off = 0;
+          while (off < cv.height){
+            pageHead();
+            var h = Math.min(sliceH, cv.height - off);
+            if (off + h < cv.height){
+              try { var cx0 = cv.getContext('2d');
+                for (var yy = h; yy > h * 0.6; yy -= 2){ var row = cx0.getImageData(0, off + yy, cv.width, 1).data, blank = true;
+                  for (var q = 0; q < row.length; q += 16){ if (row[q] < 235 || row[q+1] < 235 || row[q+2] < 235){ blank = false; break; } }
+                  if (blank){ h = yy; break; } } } catch(err){}
+            }
+            var c2 = document.createElement('canvas'); c2.width = cv.width; c2.height = h;
+            c2.getContext('2d').drawImage(cv, 0, off, cv.width, h, 0, 0, cv.width, h);
+            doc.addImage(c2.toDataURL('image/jpeg', 0.85), 'JPEG', X, y, W, h * mm); y += h * mm + 4; off += h;
+          }
+        });
+      });
+    });
+    return ch.then(function(){ box.innerHTML = ''; });
+  }
+  function printView(){
+    var cod = codigo();
+    var rows = filas().map(function(f){ return f.k === 'it' ? '<tr><td>' + f.t + '</td><td>' + esc(f.q) + '</td><td>' + f.est + '</td><td>' + f.pts + '</td></tr>' : '<tr class="' + f.k + '"><td colspan="3"><b>' + f.t + '</b></td><td>' + (f.pts || '') + '</td></tr>'; }).join('');
+    var fotos = BIDS.map(function(b){ return FOT[b].map(function(f, i){ return '<div class="pv-foto"><p><b>' + esc(ST.nombre) + ' · ' + ST.curso + ' · ' + BLQ[b] + ' · foto ' + (i + 1) + '</b><br>Código de verificación: ' + cod + '</p><img alt="" src="' + f.d + '"></div>'; }).join(''); }).join('');
+    $('#print-view').innerHTML = '<h1>Práctica preparcial · Informe individual</h1><p>Alumno: <b>' + esc(ST.nombre) + '</b> · ' + ST.curso + ' · Tiempo de trabajo: ' + tiempo() + ' · Código de verificación: <b>' + cod + '</b></p><table class="pts"><tbody>' + rows + '</tbody></table>' + fotos + exCerrados().map(function(id){ return '<div class="pv-res">' + bloqueRes(id) + '</div>'; }).join('');
+  }
+  var confirmado = false;
+  function descargar(){
+    var f = faltantes();
+    if (f.length){ msg('Antes de descargar:<br>' + f.join('<br>'), 'stop'); renderCheck(); return; }
+    var p = pendientes();
+    if (p.length && !confirmado){
+      msg('Te quedan ítems de los ejercicios 1 a 5 sin cerrar: ' + p.join(', ') + '. Si los descargás así, cuentan 0. <div class="check-actions"><button type="button" class="btn" id="btn-pdf-igual">Descargar igual</button><button type="button" class="btn-ghost plain" id="btn-pdf-volver">Volver a resolver</button></div>', 'stop');
+      return;
+    }
+    confirmado = false;
+    msg('Armando el PDF…', 'ok');
+    var LJ = window.jspdf ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js', 9000);
+    LJ.then(function(){
+      var doc = armarPDF(), ids = exCerrados();
+      var LH = (!ids.length || window.html2canvas) ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js', 9000);
+      return LH.then(function(){ return apendice(doc, ids).then(function(){ return true; }); }, function(){ return false; }).then(function(conRes){
+        doc.save(archivo());
+        msg('Listo: se descargó <b>' + archivo() + '</b>. Entregá ese archivo en Classroom.' + (conRes ? '' : '<br>No se pudieron agregar las resoluciones al PDF; podés verlas con «Imprimir o guardar a mano».'), 'ok');
+      });
+    }).catch(function(){
+      msg('No se pudo armar el PDF automático. Se abre la impresión: elegí «Guardar como PDF» como destino.', 'stop');
+      printView(); setTimeout(function(){ window.print(); }, 300);
+    });
+  }
+
+  /* ---------- pestañas ---------- */
+  function goTab(id){
+    $$('.tab').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab') === id); });
+    $$('.tanda').forEach(function(s){ s.classList.toggle('active', s.id === id); });
+    var nav = $('#tabs'); if (nav.getBoundingClientRect().top < 0) nav.scrollIntoView({block:'start'});
+    if (id === 'inf'){ renderPts(); renderCheck(); }
+  }
+
+  /* ---------- reinicio ---------- */
+  function resetPedir(){
+    $('#reset-row').innerHTML = '<span>Se borra todo lo de este dispositivo: nombre, respuestas, intentos y fotos. ¿Seguro?</span><button type="button" class="btn" id="btn-reset-si">Sí, borrar todo</button><button type="button" class="btn-ghost plain" id="btn-reset-no">Cancelar</button>';
+  }
+  function resetNo(){ $('#reset-row').innerHTML = '<button type="button" class="btn-ghost plain" id="btn-reiniciar">Borrar todo y empezar de nuevo</button>'; }
+  function resetSi(){
+    try { localStorage.removeItem(SKEY); } catch(e){}
+    var fin = function(){ location.replace(location.pathname); };
+    try { if (DB) DB.close(); var rq = indexedDB.deleteDatabase(DBN); rq.onsuccess = rq.onerror = rq.onblocked = fin; setTimeout(fin, 1500); } catch(e){ fin(); }
+  }
+
+  /* ---------- delegación ---------- */
+  document.addEventListener('click', function(ev){
+    var t = ev.target, b;
+    if ((b = t.closest('[data-tab]'))) return goTab(b.getAttribute('data-tab'));
+    if ((b = t.closest('[data-check]'))) return check(b.getAttribute('data-check'));
+    if ((b = t.closest('[data-more]'))) return pista(b.getAttribute('data-more'));
+    if ((b = t.closest('[data-fquitar]'))){ var q = b.getAttribute('data-fquitar').split(':'); FOT[q[0]].splice(+q[1], 1); dbPut(q[0]); renderFotos(q[0]); renderCheck(); return; }
+    if (t.id === 'btn-pdf') return descargar();
+    if (t.id === 'btn-pdf-igual'){ confirmado = true; return descargar(); }
+    if (t.id === 'btn-pdf-volver'){ msg('', ''); return; }
+    if (t.id === 'btn-print'){ printView(); window.print(); return; }
+    if (t.id === 'btn-reiniciar') return resetPedir();
+    if (t.id === 'btn-reset-no') return resetNo();
+    if (t.id === 'btn-reset-si') return resetSi();
+  });
+  document.addEventListener('change', function(ev){
+    var g = ev.target.closest('[data-gate]'); if (g) gate(g.getAttribute('data-gate'), g.checked);
+  });
+  document.addEventListener('keydown', function(ev){
+    if (ev.key !== 'Enter') return;
+    var c = ev.target.closest && ev.target.closest('.item'); if (!c || ev.target.tagName !== 'INPUT') return;
+    ev.preventDefault(); check(c.id.slice(3));
+  });
+
+  restaurar(); renderPts(); renderCheck();
+  dbOpen().then(dbLoad).then(function(){ BIDS.forEach(renderFotos); renderCheck(); });
+  window.__pp = {A:A, PTS:PTS, ST:ST, puntaje:puntaje, check:check};
+})();
+</script>
+</body>
+</html>
