@@ -751,7 +751,7 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
     if (cerca(v, o.tol)) return 'ok';
     if (o.k === 'prob' && v > 1 && v <= 100 && cerca(v / 100, o.tol)) return 'pct';
     var d = decs(raw), pct = /%\s*$/.test(raw), dd = pct ? d + 2 : d;
-    if (d >= 0 && o.v.some(function(r){ var k = Math.pow(10, dd); return Math.abs(Math.round(r * k) / k - v) < 1e-9; })) return 'redondeo';
+    if (dd >= 1 && o.v.some(function(r){ var k = Math.pow(10, dd); return Math.abs(Math.round(r * k) / k - v) < 1e-9; })) return 'redondeo';
     if (o.k === 'prob' && v > 1 && v <= 100 && d >= 0 && o.v.some(function(r){ var k = Math.pow(10, d + 2); return Math.abs(Math.round(r * k) / k - v / 100) < 1e-9; })) return 'pct';
     if (o.nm && o.near && cerca(v, o.near)) return 'redondeo';
     if (v !== 0 && cerca(-v, o.tol)) return 'signo';
@@ -762,8 +762,8 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
   var AVISO = {
     pct: 'Parece que escribiste un porcentaje. Escribí la probabilidad como número entre 0 y 1 (por ejemplo 0,25), o agregale el signo % al final.',
     redondeo: 'Estás muy cerca, pero redondeaste de más. Escribí más decimales (o la fracción) y volvé a verificar.',
-    rango: 'Una probabilidad siempre está entre 0 y 1. Revisá la cuenta.'
   };
+  var MAXAV = 2;
 
   /* ---------- verificación ---------- */
   function setFb(id, cls, html){ var fb = $('[data-fb="'+id+'"]'); fb.className = 'fb ' + cls; fb.innerHTML = html; }
@@ -790,14 +790,21 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
       var nums = ans.map(function(s, n){ return parseNum(s, a.ok[n].k === 'prob'); });
       if (nums.some(isNaN)){ setFb(id, 'stop', 'No reconozco ese número. Escribí un decimal con coma (0,25) o una fracción con barra (1/4), sin unidades ni letras. No se gastó ningún intento.'); return; }
       var res = nums.map(function(v, n){ return evaluar(v, a.ok[n], ans[n]); });
-      var avisos = res.filter(function(r){ return AVISO[r]; });
-      if (avisos.length){
-        var i0 = res.findIndex(function(r){ return AVISO[r]; }), txt = (res[i0] === 'redondeo' && a.ok[i0].nm) ? a.ok[i0].nm : AVISO[res[i0]];
-        setFb(id, 'stop', txt + ' No se gastó ningún intento.'); return; }
+      var i0 = res.findIndex(function(r){ return AVISO[r]; });
+      if (i0 >= 0){
+        var txt = (res[i0] === 'redondeo' && a.ok[i0].nm) ? a.ok[i0].nm : AVISO[res[i0]];
+        ST.av = ST.av || {};
+        if ((ST.av[id] || 0) < MAXAV){
+          ST.av[id] = (ST.av[id] || 0) + 1; save();
+          setFb(id, 'stop', txt + ' No se gastó ningún intento.'); return;
+        }
+        specific = txt;
+      }
       var bad = res.filter(function(r){ return r !== 'ok'; }).length;
       ok = bad === 0;
-      if (res.indexOf('signo') >= 0) specific = 'El valor está bien, pero revisá el signo.';
-      else if (!ok && a.ok.length > 1) specific = bad === 1 ? 'Uno de los dos valores no es correcto.' : 'Ninguno de los dos valores es correcto.';
+      if (res.indexOf('rango') >= 0) specific = 'Una probabilidad siempre está entre 0 y 1. Revisá la cuenta.';
+      else if (res.indexOf('signo') >= 0) specific = 'El valor está bien, pero revisá el signo.';
+      else if (!ok && !specific && a.ok.length > 1) specific = bad === 1 ? 'Uno de los dos valores no es correcto.' : 'Ninguno de los dos valores es correcto.';
     }
     marcarInicio();
     var e = ST.ej[id] || (ST.ej[id] = {res:null, att:0});
