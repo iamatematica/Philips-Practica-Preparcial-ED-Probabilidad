@@ -116,7 +116,9 @@ select{font-family:var(--f-body);font-size:15px;border:1px solid var(--g300);bor
 .gate{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--g700);font-weight:600;cursor:pointer}
 .gate input{width:17px;height:17px;accent-color:var(--azul)}
 .check-body{margin-top:8px;transition:opacity .2s}
-.check-body.locked{opacity:.4;pointer-events:none;user-select:none}
+.check-body.locked .ans,.check-body.locked [data-check]{opacity:.4;pointer-events:none;user-select:none}
+.check-body .hints{margin-top:10px}
+.check-body .hints:not(:has(.hint:not([hidden]))){display:none}
 .item{border-top:1px dashed var(--g200);padding:12px 0 6px;scroll-margin-top:80px}
 .item:first-child{border-top:0}
 .item.done .cq::after{content:" ✓";color:var(--ok);font-weight:700}
@@ -271,13 +273,12 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <article class="ej" id="ex-e1">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 1</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>Resolvé la ecuación diferencial con la condición inicial dada y escribí la solución en forma explícita.</p><div class="calc"><i>y</i>′<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>x</i> <i>y</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span><span class="gap"></span><i>y</i>(0)<wbr><span class="os">=</span>5</div></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e1-0" hidden><span class="hint-n">Pista 1</span> Separá las variables: todo lo que tiene <span class="mi"><i>y</i></span> va con <span class="mi">d<i>y</i></span> y todo lo que tiene <span class="mi"><i>x</i></span> va con <span class="mi">d<i>x</i></span>. Queda <span class="mi"><span class="fr"><span class="fn">d<i>y</i></span><span class="fd"><i>y</i></span></span><wbr><span class="os">=</span><span class="fr"><span class="fn"><i>x</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span> d<i>x</i></span>.</li><li class="hint" data-hint="e1-1" hidden><span class="hint-n">Pista 2</span> La integral de <span class="mi"><span class="fr"><span class="fn"><i>x</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span></span> sale con la sustitución <span class="mi"><i>u</i><wbr><span class="os">=</span><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span>: da <span class="mi"><span class="fr"><span class="fn">1</span><span class="fd">2</span></span> ln(<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span>.</li><li class="hint" data-hint="e1-2" hidden><span class="hint-n">Pista 3</span> Al aplicar la exponencial, <span class="mi"><span class="at">e<sup><i>C</i></sup></span></span> pasa a multiplicar: llamalo <span class="mi"><i>A</i></span>. Después reemplazá <span class="mi"><i>x</i><wbr><span class="os">=</span>0</span> e <span class="mi"><i>y</i><wbr><span class="os">=</span>5</span>.</li></ol>
-    <button type="button" class="btn-ghost" data-more="e1" data-n="3">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e1"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e1">
 <div class="item" id="ej-e1" data-ex="e1" data-tit="E1">
 <p class="cq">¿Cuál es la solución particular en forma explícita? <span class="it-pts">2 puntos</span></p>
+<div class="ans">
 <div class="choices">
 <label class="choice"><input type="radio" name="e1" value="b"><span><span class="mi"><i>y</i><wbr><span class="os">=</span><span class="sq"><svg viewBox="0 0 10 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6 14.5 L2.8 14.5 L5.2 22.4 L9.4 1.2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg><span class="sq-b"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span><wbr><span class="ob">+</span>4</span></span></label>
 <label class="choice"><input type="radio" name="e1" value="d"><span><span class="mi"><i>y</i><wbr><span class="os">=</span>5<wbr><span class="ob">+</span><span class="fr"><span class="fn">1</span><span class="fd">2</span></span> ln(<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span></span></label>
@@ -285,49 +286,61 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <label class="choice"><input type="radio" name="e1" value="e"><span><span class="mi"><i>y</i><wbr><span class="os">=</span>5 <span class="at">e<sup><span class="fr"><span class="fn"><span class="at"><i>x</i><sup>2</sup></span></span><span class="fd">2</span></span></sup></span></span></span></label>
 <label class="choice"><input type="radio" name="e1" value="c"><span><span class="mi"><i>y</i><wbr><span class="os">=</span>5 (<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span></span></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e1">Verificar</button><span class="tries" data-tries="e1"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e1" data-n="3">Pedir una pista</button><button type="button" class="btn" data-check="e1">Verificar</button><span class="tries" data-tries="e1"></span></div>
+<ol class="hints"><li class="hint" data-hint="e1-0" hidden><span class="hint-n">Pista 1</span> Separá las variables: todo lo que tiene <span class="mi"><i>y</i></span> va con <span class="mi">d<i>y</i></span> y todo lo que tiene <span class="mi"><i>x</i></span> va con <span class="mi">d<i>x</i></span>. Queda <span class="mi"><span class="fr"><span class="fn">d<i>y</i></span><span class="fd"><i>y</i></span></span><wbr><span class="os">=</span><span class="fr"><span class="fn"><i>x</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span> d<i>x</i></span>.</li><li class="hint" data-hint="e1-1" hidden><span class="hint-n">Pista 2</span> La integral de <span class="mi"><span class="fr"><span class="fn"><i>x</i></span><span class="fd"><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span></span></span> sale con la sustitución <span class="mi"><i>u</i><wbr><span class="os">=</span><span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1</span>: da <span class="mi"><span class="fr"><span class="fn">1</span><span class="fd">2</span></span> ln(<span class="at"><i>x</i><sup>2</sup></span><wbr><span class="ob">+</span>1)</span>.</li><li class="hint" data-hint="e1-2" hidden><span class="hint-n">Pista 3</span> Al aplicar la exponencial, <span class="mi"><span class="at">e<sup><i>C</i></sup></span></span> pasa a multiplicar: llamalo <span class="mi"><i>A</i></span>. Después reemplazá <span class="mi"><i>x</i><wbr><span class="os">=</span>0</span> e <span class="mi"><i>y</i><wbr><span class="os">=</span>5</span>.</li></ol>
 <div class="fb" data-fb="e1" aria-live="polite"></div></div>
   </div></div>
 </article>
 <article class="ej" id="ex-e2">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 2</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>Una taza de té recién servida está a 100 °C y se deja enfriar en una habitación, donde la temperatura se mantiene constante en 20 °C. A los 4 minutos está a 60 °C. La ley de enfriamiento de Newton dice que la velocidad con que cambia la temperatura de un cuerpo es proporcional a la diferencia entre su temperatura y la del ambiente.</p><p><b>a)</b> Hallá la solución general de la ecuación diferencial y determiná el valor de la constante de integración <span class="mi"><i>A</i></span>. Escribí la temperatura <span class="mi"><i>T</i>(<i>t</i>)</span>.<br><b>b)</b> Calculá la constante de proporcionalidad <span class="mi"><i>K</i></span>.<br><b>c)</b> ¿Qué temperatura tiene a los 8 minutos?<br><b>d)</b> ¿En qué instante llega a 25 °C?</p></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e2-0" hidden><span class="hint-n">Pista 1</span> La ley en símbolos es <span class="mi"><span class="fr"><span class="fn">d<i>T</i></span><span class="fd">d<i>t</i></span></span><wbr><span class="os">=</span><span class="at"><i>K</i>(<i>T</i><wbr><span class="ob">−</span><i>T</i><sub>a</sub>)</span></span>, y acá <span class="mi"><i>T</i><sub>a</sub><wbr><span class="os">=</span>20</span>. Separá: <span class="mi"><span class="fr"><span class="fn">d<i>T</i></span><span class="fd"><i>T</i><wbr><span class="ob">−</span>20</span></span><wbr><span class="os">=</span><i>K</i> d<i>t</i></span>.</li><li class="hint" data-hint="e2-1" hidden><span class="hint-n">Pista 2</span> Integrando y aplicando la exponencial queda <span class="mi"><i>T</i><wbr><span class="os">=</span>20<wbr><span class="ob">+</span><i>A</i> <span class="at">e<sup><i>K</i><i>t</i></sup></span></span>. La temperatura inicial te da <span class="mi"><i>A</i></span>: reemplazá <span class="mi"><i>t</i><wbr><span class="os">=</span>0</span>.</li><li class="hint" data-hint="e2-2" hidden><span class="hint-n">Pista 3</span> Para <span class="mi"><i>K</i></span>: con <span class="mi"><i>T</i>(4)<wbr><span class="os">=</span>60</span> queda <span class="mi"><span class="at">e<sup>4<i>K</i></sup></span><wbr><span class="os">=</span><span class="fr"><span class="fn">1</span><span class="fd">2</span></span></span>. Tomá logaritmo natural en los dos miembros.</li><li class="hint" data-hint="e2-3" hidden><span class="hint-n">Pista 4</span> Para d): igualá <span class="mi"><i>T</i>(<i>t</i>)<wbr><span class="os">=</span>25</span>, despejá <span class="mi"><span class="at">e<sup><i>K</i><i>t</i></sup></span></span> y tomá logaritmo.</li></ol>
-    <button type="button" class="btn-ghost" data-more="e2" data-n="4">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e2"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e2">
 <div class="item" id="ej-e2a" data-ex="e2" data-tit="E2 a)">
 <p class="cq">a) Valor de la constante de integración. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Escribí sólo el número.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>A</i></span></span> = <input type="text" inputmode="decimal" data-num="e2a-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e2a">Verificar</button><span class="tries" data-tries="e2a"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e2a" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e2a">Verificar</button><span class="tries" data-tries="e2a"></span></div>
+<ol class="hints"><li class="hint" data-hint="e2a-0" hidden><span class="hint-n">Pista 1</span> La ley en símbolos es <span class="mi"><span class="fr"><span class="fn">d<i>T</i></span><span class="fd">d<i>t</i></span></span><wbr><span class="os">=</span><span class="at"><i>K</i>(<i>T</i><wbr><span class="ob">−</span><i>T</i><sub>a</sub>)</span></span>. ¿Cuánto vale <span class="mi"><i>T</i><sub>a</sub></span> en este problema? Separá las variables e integrá.</li><li class="hint" data-hint="e2a-1" hidden><span class="hint-n">Pista 2</span> Al aplicar la exponencial queda <span class="mi"><i>T</i><wbr><span class="os">=</span>20<wbr><span class="ob">+</span><i>A</i> <span class="at">e<sup><i>K</i><i>t</i></sup></span></span>. Reemplazá <span class="mi"><i>t</i><wbr><span class="os">=</span>0</span> y <span class="mi"><i>T</i><wbr><span class="os">=</span>100</span>.</li></ol>
 <div class="fb" data-fb="e2a" aria-live="polite"></div></div>
 <div class="item" id="ej-e2b" data-ex="e2" data-tit="E2 b)">
 <p class="cq">b) Valor de <span class="mi"><i>K</i></span>, con cuatro decimales. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Decimal con coma, con cuatro decimales y con su signo.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>K</i></span></span> = <input type="text" inputmode="decimal" data-num="e2b-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e2b">Verificar</button><span class="tries" data-tries="e2b"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e2b" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e2b">Verificar</button><span class="tries" data-tries="e2b"></span></div>
+<ol class="hints"><li class="hint" data-hint="e2b-0" hidden><span class="hint-n">Pista 1</span> Usá el otro dato: a los 4 minutos está a 60 °C. Reemplazalo en <span class="mi"><i>T</i>(<i>t</i>)<wbr><span class="os">=</span>20<wbr><span class="ob">+</span>80 <span class="at">e<sup><i>K</i><i>t</i></sup></span></span>.</li><li class="hint" data-hint="e2b-1" hidden><span class="hint-n">Pista 2</span> Queda <span class="mi"><span class="at">e<sup>4<i>K</i></sup></span><wbr><span class="os">=</span><span class="fr"><span class="fn">1</span><span class="fd">2</span></span></span>. Tomá logaritmo natural en los dos miembros y dividí por 4.</li></ol>
 <div class="fb" data-fb="e2b" aria-live="polite"></div></div>
 <div class="item" id="ej-e2c" data-ex="e2" data-tit="E2 c)">
 <p class="cq">c) Temperatura a los 8 minutos, en °C. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Escribí sólo el número, sin °C. Si no da entero, redondeá a un decimal.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>T</i>(8)</span></span> = <input type="text" inputmode="decimal" data-num="e2c-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e2c">Verificar</button><span class="tries" data-tries="e2c"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e2c" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e2c">Verificar</button><span class="tries" data-tries="e2c"></span></div>
+<ol class="hints"><li class="hint" data-hint="e2c-0" hidden><span class="hint-n">Pista 1</span> Reemplazá <span class="mi"><i>t</i><wbr><span class="os">=</span>8</span> en <span class="mi"><i>T</i>(<i>t</i>)</span>.</li><li class="hint" data-hint="e2c-1" hidden><span class="hint-n">Pista 2</span> No hace falta el decimal de <span class="mi"><i>K</i></span>: <span class="mi"><span class="at">e<sup>8<i>K</i></sup></span><wbr><span class="os">=</span><span class="at">(<span class="at">e<sup>4<i>K</i></sup></span>)<sup>2</sup></span><wbr><span class="os">=</span><span class="at">(<span class="fr"><span class="fn">1</span><span class="fd">2</span></span>)<sup>2</sup></span></span>.</li></ol>
 <div class="fb" data-fb="e2c" aria-live="polite"></div></div>
 <div class="item" id="ej-e2d" data-ex="e2" data-tit="E2 d)">
 <p class="cq">d) Instante en que llega a 25 °C, en minutos. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Escribí sólo el número, sin «min». Si no da entero, redondeá a un decimal.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>t</i></span></span> = <input type="text" inputmode="decimal" data-num="e2d-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e2d">Verificar</button><span class="tries" data-tries="e2d"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e2d" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e2d">Verificar</button><span class="tries" data-tries="e2d"></span></div>
+<ol class="hints"><li class="hint" data-hint="e2d-0" hidden><span class="hint-n">Pista 1</span> Igualá <span class="mi"><i>T</i>(<i>t</i>)<wbr><span class="os">=</span>25</span> y despejá <span class="mi"><span class="at">e<sup><i>K</i><i>t</i></sup></span></span>.</li><li class="hint" data-hint="e2d-1" hidden><span class="hint-n">Pista 2</span> Queda <span class="mi"><span class="at">e<sup><i>K</i><i>t</i></sup></span><wbr><span class="os">=</span><span class="fr"><span class="fn">5</span><span class="fd">80</span></span><wbr><span class="os">=</span><span class="fr"><span class="fn">1</span><span class="fd">16</span></span></span>. Tomá logaritmo: <span class="mi"><i>K</i><i>t</i><wbr><span class="os">=</span>ln <span class="fr"><span class="fn">1</span><span class="fd">16</span></span></span>, y <span class="mi">ln <span class="fr"><span class="fn">1</span><span class="fd">16</span></span><wbr><span class="os">=</span>4 ln <span class="fr"><span class="fn">1</span><span class="fd">2</span></span></span>.</li></ol>
 <div class="fb" data-fb="e2d" aria-live="polite"></div></div>
   </div></div>
 </article>
@@ -337,72 +350,87 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <article class="ej" id="ex-e3">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 3</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>Una bolsa tiene 5 bolitas rojas y 5 verdes. Se extraen tres bolitas, una después de la otra, sin reposición. Calculá la probabilidad de que:</p><p><b>a)</b> las tres sean rojas; <b>b)</b> al menos una sea verde; <b>c)</b> exactamente dos sean rojas; <b>d)</b> la tercera sea roja, sabiendo que las dos primeras fueron verdes.</p></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e3-0" hidden><span class="hint-n">Pista 1</span> Pensalo con un diagrama de árbol: en cada extracción hay una bolita menos, y la probabilidad de una rama es el producto de las probabilidades a lo largo de ella (regla del producto).</li><li class="hint" data-hint="e3-1" hidden><span class="hint-n">Pista 2</span> «Al menos una verde» es el complemento de «ninguna verde», que es «las tres rojas».</li><li class="hint" data-hint="e3-2" hidden><span class="hint-n">Pista 3</span> «Exactamente dos rojas» puede darse en tres órdenes: <span class="mi"><i>R</i><i>R</i><i>V</i></span>, <span class="mi"><i>R</i><i>V</i><i>R</i></span> y <span class="mi"><i>V</i><i>R</i><i>R</i></span>. Calculá una rama y fijate que las tres valen lo mismo.</li><li class="hint" data-hint="e3-3" hidden><span class="hint-n">Pista 4</span> En d), después de sacar dos verdes, ¿cuántas bolitas quedan y cuántas de ellas son rojas?</li></ol>
-    <button type="button" class="btn-ghost" data-more="e3" data-n="4">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e3"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e3">
 <div class="item" id="ej-e3a" data-ex="e3" data-tit="E3 a)">
 <p class="cq">a) Las tres son rojas. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>R</i><i>R</i><i>R</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e3a-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e3a">Verificar</button><span class="tries" data-tries="e3a"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e3a" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e3a">Verificar</button><span class="tries" data-tries="e3a"></span></div>
+<ol class="hints"><li class="hint" data-hint="e3a-0" hidden><span class="hint-n">Pista 1</span> Hacé el diagrama de árbol: en cada extracción hay una bolita menos. La probabilidad de una rama es el producto de las probabilidades a lo largo de ella.</li><li class="hint" data-hint="e3a-1" hidden><span class="hint-n">Pista 2</span> La primera roja tiene probabilidad <span class="mi"><span class="fr"><span class="fn">5</span><span class="fd">10</span></span></span>. Para la segunda quedan 9 bolitas y 4 rojas; para la tercera, 8 bolitas y 3 rojas.</li></ol>
 <div class="fb" data-fb="e3a" aria-live="polite"></div></div>
 <div class="item" id="ej-e3b" data-ex="e3" data-tit="E3 b)">
 <p class="cq">b) Al menos una es verde. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e3b-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e3b">Verificar</button><span class="tries" data-tries="e3b"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e3b" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e3b">Verificar</button><span class="tries" data-tries="e3b"></span></div>
+<ol class="hints"><li class="hint" data-hint="e3b-0" hidden><span class="hint-n">Pista 1</span> Lo contrario de «al menos una verde» es «ninguna verde».</li><li class="hint" data-hint="e3b-1" hidden><span class="hint-n">Pista 2</span> «Ninguna verde» es «las tres rojas», que ya calculaste en a). Restale ese valor a 1.</li></ol>
 <div class="fb" data-fb="e3b" aria-live="polite"></div></div>
 <div class="item" id="ej-e3c" data-ex="e3" data-tit="E3 c)">
 <p class="cq">c) Exactamente dos son rojas. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e3c-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e3c">Verificar</button><span class="tries" data-tries="e3c"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e3c" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e3c">Verificar</button><span class="tries" data-tries="e3c"></span></div>
+<ol class="hints"><li class="hint" data-hint="e3c-0" hidden><span class="hint-n">Pista 1</span> «Exactamente dos rojas» puede darse en tres órdenes: <span class="mi"><i>R</i><i>R</i><i>V</i></span>, <span class="mi"><i>R</i><i>V</i><i>R</i></span> y <span class="mi"><i>V</i><i>R</i><i>R</i></span>.</li><li class="hint" data-hint="e3c-1" hidden><span class="hint-n">Pista 2</span> Calculá <span class="mi"><i>P</i>(<i>R</i><i>R</i><i>V</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn">5</span><span class="fd">10</span></span><span class="ob">·</span><span class="fr"><span class="fn">4</span><span class="fd">9</span></span><span class="ob">·</span><span class="fr"><span class="fn">5</span><span class="fd">8</span></span></span>. Las otras dos ramas tienen los mismos factores en otro orden: sumá las tres.</li></ol>
 <div class="fb" data-fb="e3c" aria-live="polite"></div></div>
 <div class="item" id="ej-e3d" data-ex="e3" data-tit="E3 d)">
 <p class="cq">d) La tercera es roja, sabiendo que las dos primeras fueron verdes. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e3d-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e3d">Verificar</button><span class="tries" data-tries="e3d"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e3d" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e3d">Verificar</button><span class="tries" data-tries="e3d"></span></div>
+<ol class="hints"><li class="hint" data-hint="e3d-0" hidden><span class="hint-n">Pista 1</span> Ya salieron dos verdes. ¿Cuántas bolitas quedan en la bolsa, y cuántas son rojas?</li><li class="hint" data-hint="e3d-1" hidden><span class="hint-n">Pista 2</span> Quedan 8 bolitas: las 5 rojas y 3 verdes.</li></ol>
 <div class="fb" data-fb="e3d" aria-live="polite"></div></div>
   </div></div>
 </article>
 <article class="ej" id="ex-e4">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 4</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>Sean <span class="mi"><i>A</i></span> y <span class="mi"><i>B</i></span> dos sucesos de un mismo experimento tales que</p><div class="calc"><i>P</i>(<i>A</i>)<wbr><span class="os">=</span>0,5<span class="gap"></span><i>P</i>(<i>B</i>)<wbr><span class="os">=</span>0,4<span class="gap"></span><i>P</i>(<span class="at">(<i>A</i><span class="ob">∪</span><i>B</i>)<sup>c</sup></span>)<wbr><span class="os">=</span>0,3</div><p><b>a)</b> Calculá <span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span> y <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span>.<br><b>b)</b> Calculá la probabilidad de que ocurra <span class="mi"><i>A</i></span> y no ocurra <span class="mi"><i>B</i></span>.<br><b>c)</b> ¿<span class="mi"><i>A</i></span> y <span class="mi"><i>B</i></span> son independientes? ¿Son mutuamente excluyentes? Justificá.</p></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e4-0" hidden><span class="hint-n">Pista 1</span> El dato <span class="mi"><i>P</i>(<span class="at">(<i>A</i><span class="ob">∪</span><i>B</i>)<sup>c</sup></span>)</span> es el complemento de la unión: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)<wbr><span class="os">=</span>1<wbr><span class="ob">−</span>0,3</span>.</li><li class="hint" data-hint="e4-1" hidden><span class="hint-n">Pista 2</span> Para la intersección usá la regla de la suma despejada: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span><i>P</i>(<i>A</i>)<wbr><span class="ob">+</span><i>P</i>(<i>B</i>)<wbr><span class="ob">−</span><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span>.</li><li class="hint" data-hint="e4-2" hidden><span class="hint-n">Pista 3</span> «Ocurre <span class="mi"><i>A</i></span> y no ocurre <span class="mi"><i>B</i></span>» es la parte de <span class="mi"><i>A</i></span> que queda afuera de <span class="mi"><i>B</i></span>: <span class="mi"><i>P</i>(<i>A</i>)<wbr><span class="ob">−</span><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span>.</li><li class="hint" data-hint="e4-3" hidden><span class="hint-n">Pista 4</span> Independientes: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span><i>P</i>(<i>A</i>)<span class="ob">·</span><i>P</i>(<i>B</i>)</span>. Excluyentes: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span>0</span>.</li></ol>
-    <button type="button" class="btn-ghost" data-more="e4" data-n="4">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e4"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e4">
 <div class="item" id="ej-e4a" data-ex="e4" data-tit="E4 a)">
 <p class="cq">a) Unión e intersección. <span class="it-pts">0,8 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e4a-0" autocomplete="off"></label>
 <label class="numf"><span><span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e4a-1" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e4a">Verificar</button><span class="tries" data-tries="e4a"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e4a" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e4a">Verificar</button><span class="tries" data-tries="e4a"></span></div>
+<ol class="hints"><li class="hint" data-hint="e4a-0" hidden><span class="hint-n">Pista 1</span> El dato <span class="mi"><i>P</i>(<span class="at">(<i>A</i><span class="ob">∪</span><i>B</i>)<sup>c</sup></span>)</span> es el complemento de la unión: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)<wbr><span class="os">=</span>1<wbr><span class="ob">−</span>0,3</span>.</li><li class="hint" data-hint="e4a-1" hidden><span class="hint-n">Pista 2</span> Para la intersección, despejá la regla de la suma: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span><i>P</i>(<i>A</i>)<wbr><span class="ob">+</span><i>P</i>(<i>B</i>)<wbr><span class="ob">−</span><i>P</i>(<i>A</i><span class="ob">∪</span><i>B</i>)</span>.</li></ol>
 <div class="fb" data-fb="e4a" aria-live="polite"></div></div>
 <div class="item" id="ej-e4b" data-ex="e4" data-tit="E4 b)">
 <p class="cq">b) Ocurre <span class="mi"><i>A</i></span> y no ocurre <span class="mi"><i>B</i></span>. <span class="it-pts">0,6 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e4b-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e4b">Verificar</button><span class="tries" data-tries="e4b"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e4b" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e4b">Verificar</button><span class="tries" data-tries="e4b"></span></div>
+<ol class="hints"><li class="hint" data-hint="e4b-0" hidden><span class="hint-n">Pista 1</span> En el diagrama de Venn, «ocurre <span class="mi"><i>A</i></span> y no ocurre <span class="mi"><i>B</i></span>» es la parte de <span class="mi"><i>A</i></span> que queda afuera de <span class="mi"><i>B</i></span>.</li><li class="hint" data-hint="e4b-1" hidden><span class="hint-n">Pista 2</span> A <span class="mi"><i>A</i></span> completo sacale la intersección: <span class="mi"><i>P</i>(<i>A</i>)<wbr><span class="ob">−</span><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)</span>.</li></ol>
 <div class="fb" data-fb="e4b" aria-live="polite"></div></div>
 <div class="item" id="ej-e4c" data-ex="e4" data-tit="E4 c)">
 <p class="cq">c) ¿Qué se puede afirmar de <span class="mi"><i>A</i></span> y <span class="mi"><i>B</i></span>? <span class="it-pts">0,6 puntos</span></p>
+<div class="ans">
 <div class="choices">
 <label class="choice"><input type="radio" name="e4c" value="c"><span>No son independientes ni excluyentes.</span></label>
 <label class="choice"><input type="radio" name="e4c" value="a"><span>Son independientes y no son excluyentes.</span></label>
@@ -410,49 +438,61 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <label class="choice"><input type="radio" name="e4c" value="b"><span>Son independientes y excluyentes.</span></label>
 <label class="choice"><input type="radio" name="e4c" value="d"><span>No son independientes y son excluyentes.</span></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e4c">Verificar</button><span class="tries" data-tries="e4c"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e4c" data-n="1">Pedir una pista</button><button type="button" class="btn" data-check="e4c">Verificar</button><span class="tries" data-tries="e4c"></span></div>
+<ol class="hints"><li class="hint" data-hint="e4c-0" hidden><span class="hint-n">Pista 1</span> Independientes: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span><i>P</i>(<i>A</i>)<span class="ob">·</span><i>P</i>(<i>B</i>)</span>. Excluyentes: <span class="mi"><i>P</i>(<i>A</i><span class="ob">∩</span><i>B</i>)<wbr><span class="os">=</span>0</span>. Compará con lo que obtuviste en a).</li></ol>
 <div class="fb" data-fb="e4c" aria-live="polite"></div></div>
   </div></div>
 </article>
 <article class="ej" id="ex-e5">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 5</h3><span class="ej-pts">2 puntos</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>Un supermercado recibe frascos de tres envasadoras: el 50 % de la envasadora 1, el 30 % de la 2 y el resto de la 3. Son defectuosos el 2 % de los frascos de la envasadora 1, el 3 % de los de la 2 y el 6 % de los de la 3. Se elige al azar un frasco.</p><p><b>a)</b> Calculá la probabilidad de que sea defectuoso.<br><b>b)</b> Calculá la probabilidad de que no sea defectuoso.<br><b>c)</b> Calculá la probabilidad de que provenga de la envasadora 2 y sea defectuoso.<br><b>d)</b> Se eligen al azar dos frascos; son tantos que lo que pase con uno no cambia las probabilidades del otro. Calculá la probabilidad de que al menos uno sea defectuoso.</p></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e5-0" hidden><span class="hint-n">Pista 1</span> Armá el árbol: primero la envasadora (0,5 · 0,3 · 0,2), después defectuoso o no. La envasadora 3 manda el 20 % que falta.</li><li class="hint" data-hint="e5-1" hidden><span class="hint-n">Pista 2</span> Para a), sumá las tres ramas que terminan en defectuoso; cada rama es un producto (probabilidad total).</li><li class="hint" data-hint="e5-2" hidden><span class="hint-n">Pista 3</span> c) es una sola rama del árbol: envasadora 2 y defectuoso.</li><li class="hint" data-hint="e5-3" hidden><span class="hint-n">Pista 4</span> d): lo contrario de «al menos uno defectuoso» es «ninguno defectuoso». Los dos frascos son independientes, así que se multiplica.</li></ol>
-    <button type="button" class="btn-ghost" data-more="e5" data-n="4">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e5"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e5">
 <div class="item" id="ej-e5a" data-ex="e5" data-tit="E5 a)">
 <p class="cq">a) Es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>D</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e5a-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e5a">Verificar</button><span class="tries" data-tries="e5a"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e5a" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e5a">Verificar</button><span class="tries" data-tries="e5a"></span></div>
+<ol class="hints"><li class="hint" data-hint="e5a-0" hidden><span class="hint-n">Pista 1</span> Armá el árbol: primero la envasadora (0,5; 0,3 y el 0,2 que falta) y después defectuoso o no, con el porcentaje de cada envasadora.</li><li class="hint" data-hint="e5a-1" hidden><span class="hint-n">Pista 2</span> Sumá las tres ramas que terminan en defectuoso: <span class="mi">0,5<span class="ob">·</span>0,02<wbr><span class="ob">+</span>0,3<span class="ob">·</span>0,03<wbr><span class="ob">+</span>0,2<span class="ob">·</span>0,06</span>.</li></ol>
 <div class="fb" data-fb="e5a" aria-live="polite"></div></div>
 <div class="item" id="ej-e5b" data-ex="e5" data-tit="E5 b)">
 <p class="cq">b) No es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e5b-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e5b">Verificar</button><span class="tries" data-tries="e5b"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e5b" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e5b">Verificar</button><span class="tries" data-tries="e5b"></span></div>
+<ol class="hints"><li class="hint" data-hint="e5b-0" hidden><span class="hint-n">Pista 1</span> «No defectuoso» es el complemento de «defectuoso».</li><li class="hint" data-hint="e5b-1" hidden><span class="hint-n">Pista 2</span> Restale a 1 lo que obtuviste en a).</li></ol>
 <div class="fb" data-fb="e5b" aria-live="polite"></div></div>
 <div class="item" id="ej-e5c" data-ex="e5" data-tit="E5 c)">
 <p class="cq">c) Proviene de la envasadora 2 y es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e5c-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e5c">Verificar</button><span class="tries" data-tries="e5c"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e5c" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e5c">Verificar</button><span class="tries" data-tries="e5c"></span></div>
+<ol class="hints"><li class="hint" data-hint="e5c-0" hidden><span class="hint-n">Pista 1</span> Es una sola rama del árbol, no una probabilidad condicional.</li><li class="hint" data-hint="e5c-1" hidden><span class="hint-n">Pista 2</span> Multiplicá la probabilidad de la envasadora 2 (0,3) por la de que un frasco de esa envasadora sea defectuoso (0,03).</li></ol>
 <div class="fb" data-fb="e5c" aria-live="polite"></div></div>
 <div class="item" id="ej-e5d" data-ex="e5" data-tit="E5 d)">
 <p class="cq">d) Al menos uno de los dos frascos es defectuoso. <span class="it-pts">0,5 puntos</span></p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i></span></span> = <input type="text" inputmode="decimal" data-num="e5d-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e5d">Verificar</button><span class="tries" data-tries="e5d"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e5d" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e5d">Verificar</button><span class="tries" data-tries="e5d"></span></div>
+<ol class="hints"><li class="hint" data-hint="e5d-0" hidden><span class="hint-n">Pista 1</span> Lo contrario de «al menos uno defectuoso» es «ninguno defectuoso».</li><li class="hint" data-hint="e5d-1" hidden><span class="hint-n">Pista 2</span> Uno no cambia las probabilidades del otro: <span class="mi"><i>P</i>(ninguno)<wbr><span class="os">=</span>0,969<span class="ob">·</span>0,969</span>. Restale ese valor a 1.</li></ol>
 <div class="fb" data-fb="e5d" aria-live="polite"></div></div>
   </div></div>
 </article>
@@ -462,38 +502,46 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <article class="ej" id="ex-e6">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 6</h3><span class="ej-pts">adicional</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>Se encuestó a 200 alumnos de 5.º año sobre si practican deporte y si tocan algún instrumento. De los 120 que practican deporte, 48 tocan un instrumento. De los 80 que no practican deporte, 12 tocan un instrumento. Se elige al azar un alumno.</p><p><b>a)</b> Calculá la probabilidad de que toque un instrumento.<br><b>b)</b> Sabiendo que practica deporte, calculá con la fórmula de la probabilidad condicional la probabilidad de que toque un instrumento. ¿Cuántos alumnos forman el nuevo espacio muestral?<br><b>c)</b> Sabiendo que toca un instrumento, calculá la probabilidad de que no practique deporte.<br><b>d)</b> ¿«Practica deporte» y «toca un instrumento» son independientes? Justificá.</p></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e6-0" hidden><span class="hint-n">Pista 1</span> Contá primero cuántos tocan un instrumento en total: los que hacen deporte y los que no.</li><li class="hint" data-hint="e6-1" hidden><span class="hint-n">Pista 2</span> Con la fórmula: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<i>I</i><span class="ob">∩</span><i>D</i>)</span><span class="fd"><i>P</i>(<i>D</i>)</span></span></span>. Escribí las dos probabilidades sobre 200 y mirá qué se simplifica.</li><li class="hint" data-hint="e6-2" hidden><span class="hint-n">Pista 3</span> Para c), el suceso que se sabe es «toca un instrumento»: <span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">∩</span><i>I</i>)</span><span class="fd"><i>P</i>(<i>I</i>)</span></span></span>.</li><li class="hint" data-hint="e6-3" hidden><span class="hint-n">Pista 4</span> Son independientes si saber que practica deporte no cambia la probabilidad: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><i>P</i>(<i>I</i>)</span>.</li></ol>
-    <button type="button" class="btn-ghost" data-more="e6" data-n="4">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e6"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e6">
 <div class="item" id="ej-e6a" data-ex="e6" data-tit="E6 a)">
 <p class="cq">a) Toca un instrumento. </p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e6a-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e6a">Verificar</button><span class="tries" data-tries="e6a"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e6a" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e6a">Verificar</button><span class="tries" data-tries="e6a"></span></div>
+<ol class="hints"><li class="hint" data-hint="e6a-0" hidden><span class="hint-n">Pista 1</span> Contá cuántos tocan un instrumento en total: los que practican deporte y los que no.</li><li class="hint" data-hint="e6a-1" hidden><span class="hint-n">Pista 2</span> Dividí ese total por los 200 alumnos encuestados.</li></ol>
 <div class="fb" data-fb="e6a" aria-live="polite"></div></div>
 <div class="item" id="ej-e6b" data-ex="e6" data-tit="E6 b)">
 <p class="cq">b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral. </p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e6b-0" autocomplete="off"></label>
 <label class="numf"><span>Alumnos del nuevo espacio muestral</span> = <input type="text" inputmode="decimal" data-num="e6b-1" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e6b">Verificar</button><span class="tries" data-tries="e6b"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e6b" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e6b">Verificar</button><span class="tries" data-tries="e6b"></span></div>
+<ol class="hints"><li class="hint" data-hint="e6b-0" hidden><span class="hint-n">Pista 1</span> Usá la fórmula <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<i>I</i><span class="ob">∩</span><i>D</i>)</span><span class="fd"><i>P</i>(<i>D</i>)</span></span></span>.</li><li class="hint" data-hint="e6b-1" hidden><span class="hint-n">Pista 2</span> Escribí las dos probabilidades sobre 200: ese número se simplifica. El nuevo espacio muestral son los que practican deporte.</li></ol>
 <div class="fb" data-fb="e6b" aria-live="polite"></div></div>
 <div class="item" id="ej-e6c" data-ex="e6" data-tit="E6 c)">
 <p class="cq">c) No practica deporte, sabiendo que toca un instrumento. </p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e6c-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e6c">Verificar</button><span class="tries" data-tries="e6c"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e6c" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e6c">Verificar</button><span class="tries" data-tries="e6c"></span></div>
+<ol class="hints"><li class="hint" data-hint="e6c-0" hidden><span class="hint-n">Pista 1</span> Ahora lo que se sabe es que toca un instrumento: <span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">∩</span><i>I</i>)</span><span class="fd"><i>P</i>(<i>I</i>)</span></span></span>.</li><li class="hint" data-hint="e6c-1" hidden><span class="hint-n">Pista 2</span> Arriba van los que no practican deporte y tocan; abajo, todos los que tocan (lo que contaste en a).</li></ol>
 <div class="fb" data-fb="e6c" aria-live="polite"></div></div>
 <div class="item" id="ej-e6d" data-ex="e6" data-tit="E6 d)">
 <p class="cq">d) ¿«Practica deporte» y «toca un instrumento» son independientes? </p>
+<div class="ans">
 <div class="choices">
 <label class="choice"><input type="radio" name="e6d" value="c"><span>Son independientes, porque <span class="mi"><i>P</i>(<i>D</i><span class="ob">∩</span><i>I</i>)<wbr><span class="os">=</span>0,24<wbr><span class="os">=</span>0,6<span class="ob">·</span>0,4</span>.</span></label>
 <label class="choice"><input type="radio" name="e6d" value="d"><span>No son independientes, porque <span class="mi"><i>P</i>(<i>D</i><span class="ob">∩</span><i>I</i>)<wbr><span class="os">≠</span>0</span>.</span></label>
@@ -501,45 +549,55 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <label class="choice"><input type="radio" name="e6d" value="e"><span>No se puede saber sin conocer <span class="mi"><i>P</i>(<i>D</i><span class="ob">∪</span><i>I</i>)</span>.</span></label>
 <label class="choice"><input type="radio" name="e6d" value="b"><span>Son independientes, porque practicar deporte no impide tocar un instrumento.</span></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e6d">Verificar</button><span class="tries" data-tries="e6d"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e6d" data-n="1">Pedir una pista</button><button type="button" class="btn" data-check="e6d">Verificar</button><span class="tries" data-tries="e6d"></span></div>
+<ol class="hints"><li class="hint" data-hint="e6d-0" hidden><span class="hint-n">Pista 1</span> Son independientes si saber que practica deporte no cambia la probabilidad: compará <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span> con <span class="mi"><i>P</i>(<i>I</i>)</span>.</li></ol>
 <div class="fb" data-fb="e6d" aria-live="polite"></div></div>
   </div></div>
 </article>
 <article class="ej" id="ex-e7">
   <header class="ej-head"><h3 class="ej-tit">Ejercicio 7</h3><span class="ej-pts">adicional</span><div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div></header>
   <div class="enun"><p>En otra escuela se hizo la misma encuesta, esta vez a 300 alumnos. De los 180 que practican deporte, 54 tocan un instrumento. De los 120 que no practican deporte, 96 tocan un instrumento. Se elige al azar un alumno.</p><p><b>a)</b> Calculá la probabilidad de que toque un instrumento.<br><b>b)</b> Sabiendo que practica deporte, calculá con la fórmula de la probabilidad condicional la probabilidad de que toque un instrumento. ¿Cuántos alumnos forman el nuevo espacio muestral?<br><b>c)</b> Sabiendo que toca un instrumento, calculá la probabilidad de que no practique deporte.<br><b>d)</b> ¿«Practica deporte» y «toca un instrumento» son independientes? Justificá y compará los resultados de a) y b) con los del ejercicio 6.</p></div>
-  <div class="hints-box"><ol class="hints"><li class="hint" data-hint="e7-0" hidden><span class="hint-n">Pista 1</span> Contá primero cuántos tocan un instrumento en total: los que hacen deporte y los que no.</li><li class="hint" data-hint="e7-1" hidden><span class="hint-n">Pista 2</span> Con la fórmula: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<i>I</i><span class="ob">∩</span><i>D</i>)</span><span class="fd"><i>P</i>(<i>D</i>)</span></span></span>. Escribí las dos probabilidades sobre 300 y mirá qué se simplifica.</li><li class="hint" data-hint="e7-2" hidden><span class="hint-n">Pista 3</span> Para c), el suceso que se sabe es «toca un instrumento»: <span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">∩</span><i>I</i>)</span><span class="fd"><i>P</i>(<i>I</i>)</span></span></span>.</li><li class="hint" data-hint="e7-3" hidden><span class="hint-n">Pista 4</span> Son independientes si saber que practica deporte no cambia la probabilidad: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><i>P</i>(<i>I</i>)</span>.</li></ol>
-    <button type="button" class="btn-ghost" data-more="e7" data-n="4">Pedir una pista</button></div>
   <div class="check">
   <label class="gate"><input type="checkbox" data-gate="e7"> Ya tengo el desarrollo completo escrito en la hoja</label>
   <div class="check-body locked" data-body="e7">
 <div class="item" id="ej-e7a" data-ex="e7" data-tit="E7 a)">
 <p class="cq">a) Toca un instrumento. </p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e7a-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e7a">Verificar</button><span class="tries" data-tries="e7a"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e7a" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e7a">Verificar</button><span class="tries" data-tries="e7a"></span></div>
+<ol class="hints"><li class="hint" data-hint="e7a-0" hidden><span class="hint-n">Pista 1</span> Contá cuántos tocan un instrumento en total: los que practican deporte y los que no.</li><li class="hint" data-hint="e7a-1" hidden><span class="hint-n">Pista 2</span> Dividí ese total por los 300 alumnos encuestados.</li></ol>
 <div class="fb" data-fb="e7a" aria-live="polite"></div></div>
 <div class="item" id="ej-e7b" data-ex="e7" data-tit="E7 b)">
 <p class="cq">b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral. </p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e7b-0" autocomplete="off"></label>
 <label class="numf"><span>Alumnos del nuevo espacio muestral</span> = <input type="text" inputmode="decimal" data-num="e7b-1" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e7b">Verificar</button><span class="tries" data-tries="e7b"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e7b" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e7b">Verificar</button><span class="tries" data-tries="e7b"></span></div>
+<ol class="hints"><li class="hint" data-hint="e7b-0" hidden><span class="hint-n">Pista 1</span> Usá la fórmula <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<i>I</i><span class="ob">∩</span><i>D</i>)</span><span class="fd"><i>P</i>(<i>D</i>)</span></span></span>.</li><li class="hint" data-hint="e7b-1" hidden><span class="hint-n">Pista 2</span> Escribí las dos probabilidades sobre 300: ese número se simplifica. El nuevo espacio muestral son los que practican deporte.</li></ol>
 <div class="fb" data-fb="e7b" aria-live="polite"></div></div>
 <div class="item" id="ej-e7c" data-ex="e7" data-tit="E7 c)">
 <p class="cq">c) No practica deporte, sabiendo que toca un instrumento. </p>
+<div class="ans">
 <p class="nnote">Fracción con barra o decimal con coma, con al menos tres decimales.</p>
 <div class="nums">
 <label class="numf"><span><span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)</span></span> = <input type="text" inputmode="decimal" data-num="e7c-0" autocomplete="off"></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e7c">Verificar</button><span class="tries" data-tries="e7c"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e7c" data-n="2">Pedir una pista</button><button type="button" class="btn" data-check="e7c">Verificar</button><span class="tries" data-tries="e7c"></span></div>
+<ol class="hints"><li class="hint" data-hint="e7c-0" hidden><span class="hint-n">Pista 1</span> Ahora lo que se sabe es que toca un instrumento: <span class="mi"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">|</span><i>I</i>)<wbr><span class="os">=</span><span class="fr"><span class="fn"><i>P</i>(<span class="at"><i>D</i><sup>c</sup></span><span class="ob">∩</span><i>I</i>)</span><span class="fd"><i>P</i>(<i>I</i>)</span></span></span>.</li><li class="hint" data-hint="e7c-1" hidden><span class="hint-n">Pista 2</span> Arriba van los que no practican deporte y tocan; abajo, todos los que tocan (lo que contaste en a).</li></ol>
 <div class="fb" data-fb="e7c" aria-live="polite"></div></div>
 <div class="item" id="ej-e7d" data-ex="e7" data-tit="E7 d)">
 <p class="cq">d) ¿«Practica deporte» y «toca un instrumento» son independientes? </p>
+<div class="ans">
 <div class="choices">
 <label class="choice"><input type="radio" name="e7d" value="b"><span>Son independientes, porque <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span>0,3</span> es igual al <span class="mi"><i>P</i>(<i>I</i>)</span> del ejercicio 6.</span></label>
 <label class="choice"><input type="radio" name="e7d" value="a"><span>No son independientes: <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)<wbr><span class="os">=</span>0,3</span> y <span class="mi"><i>P</i>(<i>I</i>)<wbr><span class="os">=</span>0,5</span>. Acá saber que practica deporte baja la probabilidad de tocar un instrumento; en el ejercicio 6 la subía (0,4 contra 0,3).</span></label>
@@ -547,7 +605,9 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 <label class="choice"><input type="radio" name="e7d" value="e"><span>No son independientes, porque son excluyentes.</span></label>
 <label class="choice"><input type="radio" name="e7d" value="c"><span>No son independientes, y en las dos escuelas practicar deporte sube la probabilidad de tocar un instrumento.</span></label>
 </div>
-<div class="check-actions"><button type="button" class="btn" data-check="e7d">Verificar</button><span class="tries" data-tries="e7d"></span></div>
+</div>
+<div class="check-actions"><button type="button" class="btn-ghost" data-more="e7d" data-n="1">Pedir una pista</button><button type="button" class="btn" data-check="e7d">Verificar</button><span class="tries" data-tries="e7d"></span></div>
+<ol class="hints"><li class="hint" data-hint="e7d-0" hidden><span class="hint-n">Pista 1</span> Son independientes si saber que practica deporte no cambia la probabilidad: compará <span class="mi"><i>P</i>(<i>I</i><span class="ob">|</span><i>D</i>)</span> con <span class="mi"><i>P</i>(<i>I</i>)</span>.</li></ol>
 <div class="fb" data-fb="e7d" aria-live="polite"></div></div>
   </div></div>
 </article>
@@ -600,8 +660,8 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
   'use strict';
   function dec64(id){ var r = document.getElementById(id).textContent.trim(); return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(r), function(c){ return c.charCodeAt(0); }))); }
   var A = dec64('ans');
-  var PTS = [{"id": "e1", "ex": "e1", "b": "ed", "tit": "E1", "max": 2, "q": "¿Cuál es la solución particular en forma explícita?"}, {"id": "e2a", "ex": "e2", "b": "ed", "tit": "E2 a)", "max": 0.5, "q": "a) Valor de la constante de integración."}, {"id": "e2b", "ex": "e2", "b": "ed", "tit": "E2 b)", "max": 0.5, "q": "b) Valor de K, con cuatro decimales."}, {"id": "e2c", "ex": "e2", "b": "ed", "tit": "E2 c)", "max": 0.5, "q": "c) Temperatura a los 8 minutos, en °C."}, {"id": "e2d", "ex": "e2", "b": "ed", "tit": "E2 d)", "max": 0.5, "q": "d) Instante en que llega a 25 °C, en minutos."}, {"id": "e3a", "ex": "e3", "b": "pr", "tit": "E3 a)", "max": 0.5, "q": "a) Las tres son rojas."}, {"id": "e3b", "ex": "e3", "b": "pr", "tit": "E3 b)", "max": 0.5, "q": "b) Al menos una es verde."}, {"id": "e3c", "ex": "e3", "b": "pr", "tit": "E3 c)", "max": 0.5, "q": "c) Exactamente dos son rojas."}, {"id": "e3d", "ex": "e3", "b": "pr", "tit": "E3 d)", "max": 0.5, "q": "d) La tercera es roja, sabiendo que las dos primeras fueron verdes."}, {"id": "e4a", "ex": "e4", "b": "pr", "tit": "E4 a)", "max": 0.8, "q": "a) Unión e intersección."}, {"id": "e4b", "ex": "e4", "b": "pr", "tit": "E4 b)", "max": 0.6, "q": "b) Ocurre A y no ocurre B."}, {"id": "e4c", "ex": "e4", "b": "pr", "tit": "E4 c)", "max": 0.6, "q": "c) ¿Qué se puede afirmar de A y B?"}, {"id": "e5a", "ex": "e5", "b": "pr", "tit": "E5 a)", "max": 0.5, "q": "a) Es defectuoso."}, {"id": "e5b", "ex": "e5", "b": "pr", "tit": "E5 b)", "max": 0.5, "q": "b) No es defectuoso."}, {"id": "e5c", "ex": "e5", "b": "pr", "tit": "E5 c)", "max": 0.5, "q": "c) Proviene de la envasadora 2 y es defectuoso."}, {"id": "e5d", "ex": "e5", "b": "pr", "tit": "E5 d)", "max": 0.5, "q": "d) Al menos uno de los dos frascos es defectuoso."}, {"id": "e6a", "ex": "e6", "b": "co", "tit": "E6 a)", "max": 0, "q": "a) Toca un instrumento."}, {"id": "e6b", "ex": "e6", "b": "co", "tit": "E6 b)", "max": 0, "q": "b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral."}, {"id": "e6c", "ex": "e6", "b": "co", "tit": "E6 c)", "max": 0, "q": "c) No practica deporte, sabiendo que toca un instrumento."}, {"id": "e6d", "ex": "e6", "b": "co", "tit": "E6 d)", "max": 0, "q": "d) ¿«Practica deporte» y «toca un instrumento» son independientes?"}, {"id": "e7a", "ex": "e7", "b": "co", "tit": "E7 a)", "max": 0, "q": "a) Toca un instrumento."}, {"id": "e7b", "ex": "e7", "b": "co", "tit": "E7 b)", "max": 0, "q": "b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral."}, {"id": "e7c", "ex": "e7", "b": "co", "tit": "E7 c)", "max": 0, "q": "c) No practica deporte, sabiendo que toca un instrumento."}, {"id": "e7d", "ex": "e7", "b": "co", "tit": "E7 d)", "max": 0, "q": "d) ¿«Practica deporte» y «toca un instrumento» son independientes?"}];
-  var EXS = [{"id": "e1", "n": 1, "b": "ed", "nh": 3}, {"id": "e2", "n": 2, "b": "ed", "nh": 4}, {"id": "e3", "n": 3, "b": "pr", "nh": 4}, {"id": "e4", "n": 4, "b": "pr", "nh": 4}, {"id": "e5", "n": 5, "b": "pr", "nh": 4}, {"id": "e6", "n": 6, "b": "co", "nh": 4}, {"id": "e7", "n": 7, "b": "co", "nh": 4}];
+  var PTS = [{"id": "e1", "ex": "e1", "b": "ed", "tit": "E1", "max": 2, "nh": 3, "q": "¿Cuál es la solución particular en forma explícita?"}, {"id": "e2a", "ex": "e2", "b": "ed", "tit": "E2 a)", "max": 0.5, "nh": 2, "q": "a) Valor de la constante de integración."}, {"id": "e2b", "ex": "e2", "b": "ed", "tit": "E2 b)", "max": 0.5, "nh": 2, "q": "b) Valor de K, con cuatro decimales."}, {"id": "e2c", "ex": "e2", "b": "ed", "tit": "E2 c)", "max": 0.5, "nh": 2, "q": "c) Temperatura a los 8 minutos, en °C."}, {"id": "e2d", "ex": "e2", "b": "ed", "tit": "E2 d)", "max": 0.5, "nh": 2, "q": "d) Instante en que llega a 25 °C, en minutos."}, {"id": "e3a", "ex": "e3", "b": "pr", "tit": "E3 a)", "max": 0.5, "nh": 2, "q": "a) Las tres son rojas."}, {"id": "e3b", "ex": "e3", "b": "pr", "tit": "E3 b)", "max": 0.5, "nh": 2, "q": "b) Al menos una es verde."}, {"id": "e3c", "ex": "e3", "b": "pr", "tit": "E3 c)", "max": 0.5, "nh": 2, "q": "c) Exactamente dos son rojas."}, {"id": "e3d", "ex": "e3", "b": "pr", "tit": "E3 d)", "max": 0.5, "nh": 2, "q": "d) La tercera es roja, sabiendo que las dos primeras fueron verdes."}, {"id": "e4a", "ex": "e4", "b": "pr", "tit": "E4 a)", "max": 0.8, "nh": 2, "q": "a) Unión e intersección."}, {"id": "e4b", "ex": "e4", "b": "pr", "tit": "E4 b)", "max": 0.6, "nh": 2, "q": "b) Ocurre A y no ocurre B."}, {"id": "e4c", "ex": "e4", "b": "pr", "tit": "E4 c)", "max": 0.6, "nh": 1, "q": "c) ¿Qué se puede afirmar de A y B?"}, {"id": "e5a", "ex": "e5", "b": "pr", "tit": "E5 a)", "max": 0.5, "nh": 2, "q": "a) Es defectuoso."}, {"id": "e5b", "ex": "e5", "b": "pr", "tit": "E5 b)", "max": 0.5, "nh": 2, "q": "b) No es defectuoso."}, {"id": "e5c", "ex": "e5", "b": "pr", "tit": "E5 c)", "max": 0.5, "nh": 2, "q": "c) Proviene de la envasadora 2 y es defectuoso."}, {"id": "e5d", "ex": "e5", "b": "pr", "tit": "E5 d)", "max": 0.5, "nh": 2, "q": "d) Al menos uno de los dos frascos es defectuoso."}, {"id": "e6a", "ex": "e6", "b": "co", "tit": "E6 a)", "max": 0, "nh": 2, "q": "a) Toca un instrumento."}, {"id": "e6b", "ex": "e6", "b": "co", "tit": "E6 b)", "max": 0, "nh": 2, "q": "b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral."}, {"id": "e6c", "ex": "e6", "b": "co", "tit": "E6 c)", "max": 0, "nh": 2, "q": "c) No practica deporte, sabiendo que toca un instrumento."}, {"id": "e6d", "ex": "e6", "b": "co", "tit": "E6 d)", "max": 0, "nh": 1, "q": "d) ¿«Practica deporte» y «toca un instrumento» son independientes?"}, {"id": "e7a", "ex": "e7", "b": "co", "tit": "E7 a)", "max": 0, "nh": 2, "q": "a) Toca un instrumento."}, {"id": "e7b", "ex": "e7", "b": "co", "tit": "E7 b)", "max": 0, "nh": 2, "q": "b) Toca un instrumento, sabiendo que practica deporte; y cantidad de alumnos del nuevo espacio muestral."}, {"id": "e7c", "ex": "e7", "b": "co", "tit": "E7 c)", "max": 0, "nh": 2, "q": "c) No practica deporte, sabiendo que toca un instrumento."}, {"id": "e7d", "ex": "e7", "b": "co", "tit": "E7 d)", "max": 0, "nh": 1, "q": "d) ¿«Practica deporte» y «toca un instrumento» son independientes?"}];
+  var EXS = [{"id": "e1", "n": 1, "b": "ed"}, {"id": "e2", "n": 2, "b": "ed"}, {"id": "e3", "n": 3, "b": "pr"}, {"id": "e4", "n": 4, "b": "pr"}, {"id": "e5", "n": 5, "b": "pr"}, {"id": "e6", "n": 6, "b": "co"}, {"id": "e7", "n": 7, "b": "co"}];
   var BLQ = {"ed": "Ecuaciones diferenciales", "pr": "Probabilidad", "co": "Condicional"};
   var BIDS = Object.keys(BLQ);
   var SHEET = 'https://script.google.com/macros/s/AKfycbwn6pNTFS8vQotr3_JPfJ6LUUpX2zxJPqSosYW_qrCKoc4eUT4_4j1-cGwZKuXo2fsL/exec';
@@ -655,9 +715,9 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
     av.hidden = true; $('#ident-id').classList.remove('falta');
     if (volverA){
       var v = volverA; volverA = null;
-      var el = document.getElementById('ej-' + v) || document.getElementById('ex-' + v);
-      if (document.getElementById('ej-' + v)) setFb(v, 'ok', 'Listo: ' + esc((ST.nombre||'').trim()) + ', ' + ST.curso + '. Ya podés verificar.');
-      setTimeout(function(){ el.scrollIntoView({block:'center', behavior:'smooth'}); }, 150);
+      var el = document.getElementById('ej-' + v);
+      if (el) setFb(v, 'ok', 'Listo: ' + esc((ST.nombre||'').trim()) + ', ' + ST.curso + '. Ya podés verificar.');
+      if (el) setTimeout(function(){ el.scrollIntoView({block:'center', behavior:'smooth'}); }, 150);
     }
   }
 
@@ -744,7 +804,7 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
     if (ok){
       e.res = 'ok'; e.att += 1; save();
       setFb(id, 'ok', a.fbok); cerrar(id, true);
-      send(p.tit, p.b, 'Correcto', e.att - 1, ST.pistas[p.ex] || 0);
+      send(p.tit, p.b, 'Correcto', e.att - 1, ST.pistas[p.id] || 0);
     } else {
       e.att += 1;
       var left = (MAXT[a.type] || 3) - e.att;
@@ -752,32 +812,34 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
         e.res = 'fail'; save();
         setFb(id, 'stop', (specific ? specific + '<br>' : '') + 'Se terminaron los intentos de este ítem. Seguí con el siguiente; al final, en el informe, vas a tener la resolución para comparar.');
         cerrar(id, false);
-        send(p.tit, p.b, 'Sin intentos', e.att, ST.pistas[p.ex] || 0);
+        send(p.tit, p.b, 'Sin intentos', e.att, ST.pistas[p.id] || 0);
       } else {
         save();
         setFb(id, 'no', specific || 'Todavía no. Revisá el desarrollo o pedí una pista.');
         $('[data-tries="'+id+'"]').textContent = left === 1 ? 'Queda 1 intento' : 'Quedan ' + left + ' intentos';
-        send(p.tit, p.b, 'Incorrecto', e.att, ST.pistas[p.ex] || 0);
+        send(p.tit, p.b, 'Incorrecto', e.att, ST.pistas[p.id] || 0);
       }
     }
     renderReloj(); renderPts(); renderCheck();
   }
 
   /* ---------- pistas y compuertas ---------- */
-  function mostrarPistas(exId){
-    var n = ST.pistas[exId] || 0, hs = $$('[data-hint^="'+exId+'-"]');
+  function mostrarPistas(id){
+    var n = ST.pistas[id] || 0, hs = $$('[data-hint^="'+id+'-"]');
     hs.forEach(function(h, i){ h.hidden = i >= n; });
-    var b = $('[data-more="'+exId+'"]');
+    var b = $('[data-more="'+id+'"]');
     if (n >= hs.length){ b.disabled = true; b.textContent = 'No hay más pistas'; }
     else if (n > 0) b.textContent = 'Pedir otra pista';
   }
-  function pista(exId){
-    if (needIdent(exId)) return;
-    var x = exOf(exId);
-    if ((ST.pistas[exId] || 0) >= x.nh) return;
-    ST.pistas[exId] = (ST.pistas[exId] || 0) + 1;
-    marcarInicio(); save(); mostrarPistas(exId); renderReloj();
-    send('E' + x.n, x.b, 'Pidió pista', 0, ST.pistas[exId]);
+  function pista(id){
+    if (needIdent(id)) return;
+    var p = item(id);
+    if ((ST.pistas[id] || 0) >= p.nh) return;
+    ST.pistas[id] = (ST.pistas[id] || 0) + 1;
+    marcarInicio(); save(); mostrarPistas(id); renderReloj();
+    var hs = $$('[data-hint^="'+id+'-"]'), last = hs[ST.pistas[id] - 1];
+    if (last) last.scrollIntoView({block:'nearest', behavior:'smooth'});
+    send(p.tit, p.b, 'Pidió pista', 0, ST.pistas[id]);
   }
   function gate(exId, on){
     ST.gates[exId] = on; save();
@@ -786,8 +848,8 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
 
   /* ---------- restaurar ---------- */
   function restaurar(){
+    PTS.forEach(function(p){ mostrarPistas(p.id); });
     EXS.forEach(function(x){
-      mostrarPistas(x.id);
       var g = $('[data-gate="'+x.id+'"]'); g.checked = !!ST.gates[x.id];
       $('[data-body="'+x.id+'"]').classList.toggle('locked', !g.checked);
     });
@@ -824,7 +886,7 @@ sup .fr .fn,sup .fr .fd{padding:0 .25em}
     var r = puntaje(), out = [];
     BIDS.forEach(function(b){
       EXS.filter(function(x){ return x.b === b; }).forEach(function(x){
-        var np = ST.pistas[x.id] || 0;
+        var np = PTS.filter(function(p){ return p.ex === x.id; }).reduce(function(s, p){ return s + (ST.pistas[p.id] || 0); }, 0);
         out.push({k:'exh', t:'Ejercicio ' + x.n + (np ? ' · ' + np + (np === 1 ? ' pista' : ' pistas') : '')});
         PTS.filter(function(p){ return p.ex === x.id; }).forEach(function(p){
           out.push({k:'it', t:p.tit, q:p.q, est:estado(ST.ej[p.id]), pts: p.max ? fmt1(ptsDe(p)) + ' de ' + fmt1(p.max) : 'adicional'});
